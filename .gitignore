@@ -1,10 +1,13 @@
-*.class
-
+.class
+.DS_Store
+.DS_STORE
+.DS_Store?
+.Ds_Store?
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Package Files #
-*.jar
+.jar
 *.war
 *.ear
 
