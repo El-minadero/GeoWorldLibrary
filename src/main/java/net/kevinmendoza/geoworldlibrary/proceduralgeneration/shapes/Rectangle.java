@@ -19,9 +19,13 @@ class Rectangle extends Shape implements Region {
 		
 	}
 	
+	protected double getNormalizedDistance() {
+		return (a+b)/2;
+	}
+	
 	protected double getDistanceToLocalEdge(Vector2d vec) {
-		double dx = a_2 - Math.abs(vec.getX());
-		double dz = b_2 - Math.abs(vec.getY());
+		double dx = Math.abs(a_2 - Math.abs(vec.getX()));
+		double dz = Math.abs(b_2 - Math.abs(vec.getY()));
 		if (dx > dz)
 			return dz/b_2;
 		else
@@ -30,7 +34,7 @@ class Rectangle extends Shape implements Region {
 
 	@Override
 	protected Vector2d getRandLocalPoint() {
-		Vector2d vec = new Vector2d(-a/2 + this.getDouble()*a,-b/2 + this.getDouble()*b);
+		Vector2d vec = new Vector2d(-a_2 + this.getDouble()*a,-b_2 + this.getDouble()*b);
 		return vec;
 	}
 

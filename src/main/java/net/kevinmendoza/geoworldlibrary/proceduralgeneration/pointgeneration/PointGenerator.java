@@ -21,7 +21,7 @@ public class PointGenerator implements PointGeneratorInterface {
 		Vector2i center = new Vector2i(Math.floor((double)(vec.getX())/SPACING),
 									   Math.floor((double)(vec.getY())/SPACING));
 		List<Vector2i> surroundingCenters = new ArrayList<Vector2i>(8);
-		surroundingCenters.add(new Vector2i(center.getX(),center.getY()));
+		surroundingCenters.add(center);
 		for(int i =0;i<8;i++){
 			surroundingCenters.add(new Vector2i(X[i]+center.getX(),Z[i]+center.getY()));
 		}
@@ -62,7 +62,7 @@ public class PointGenerator implements PointGeneratorInterface {
 			this.seed = seed;
 			return this;
 		}
-		public PointGenerator Build() {
+		public PointGenerator build() {
 			return new PointGenerator(this);
 		}
 	}

@@ -9,12 +9,10 @@ import javax.imageio.ImageIO;
 
 import com.flowpowered.math.vector.Vector2i;
 
-import net.kevinmendoza.geoworldlibrary.geology.GeologicContainer;
-import net.kevinmendoza.geoworldlibrary.geology.regionmap.GeologicRegionMapInterface;
 
 public class TestMain {
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		Random rand = new Random();
 		BufferedImage img = new BufferedImage(501,501,BufferedImage.TYPE_INT_RGB);
 		Region region = RegionFactory.MakeRegionType(RegionTypes.RECTANGLE,new Vector2i(200,200),100,100,Math.PI/4);
@@ -34,6 +32,6 @@ public class TestMain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }

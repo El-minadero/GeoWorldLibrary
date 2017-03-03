@@ -27,5 +27,4 @@ public interface PointGeneratorInterface {
 	 */
 	public Vector2i getFullCenter(Vector2i vec);
 	
-	
 }

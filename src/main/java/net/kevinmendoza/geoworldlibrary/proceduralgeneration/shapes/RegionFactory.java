@@ -4,6 +4,8 @@ import java.util.Random;
 
 import com.flowpowered.math.vector.Vector2i;
 
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
+
 public class RegionFactory {
 	
 	private static Region MakeEllipse(Vector2i vec,double xAxis,
@@ -31,5 +33,9 @@ public class RegionFactory {
 			return MakeEllipse(vec,a,b,t);
 		else
 			return MakeRectangle(vec,a,b,t);
+	}
+	
+	public static Region MakeRegionOffsetByMap(Region region, PointModifier modifier) {
+		return new OffsetRegion(region,modifier);
 	}
 }

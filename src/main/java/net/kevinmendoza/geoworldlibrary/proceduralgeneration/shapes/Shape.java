@@ -28,7 +28,6 @@ abstract class Shape implements RandomInterface {
 	
 	public int getInt(int i) { return rand.nextInt(i); }
 	public double getDouble() { return rand.nextDouble(); }
-	public double getCenterDistance(Vector2i test) { return center.distance(test); }
 	
 	public boolean isInside(Vector2i vec) {
 		Vector2d relative = getRelativeCoordinates(vec.toDouble());
@@ -38,19 +37,20 @@ abstract class Shape implements RandomInterface {
 	
 	public Vector2i getRandomInternalPoint() {
 		Vector2d relative = getRandLocalPoint();
-		Vector2d rotated  = getRotatedCoordinates(relative);
+		Vector2d rotated  = getReverseRotatedCoordinates(relative);
 		return new Vector2i(rotated.getX()+center.getX(),rotated.getY() + center.getY()); 
 	}
 	
-	public double distanceToEdge(Vector2i vec) {
+	public double getNormalizedDistanceToEdge(Vector2i vec) {
 		Vector2d relative = getRelativeCoordinates(vec.toDouble());
-		Vector2d rotated  = getReverseRotatedCoordinates(relative);
+		Vector2d rotated  = getRotatedCoordinates(relative);
 		return getDistanceToLocalEdge(rotated);
 	}
 	
 	protected abstract double getDistanceToLocalEdge(Vector2d vec);
 	protected abstract Vector2d getRandLocalPoint();
 	protected abstract boolean isLocallyInside(Vector2d vec);
+	
 	
 	protected Vector2i getCenter() {
 		return new Vector2i(center);
@@ -61,19 +61,19 @@ abstract class Shape implements RandomInterface {
 	}
 
 	private Vector2d getRotatedCoordinates(Vector2d vec) {
-		double x = vec.getX();
+		double x = vec.getX(); double xp,zp;
 		double z = vec.getY();
-		x = x*cos - z*sin;
-		z = x*sin + z*cos;
-		return new Vector2d(x,z);
+		xp = x*cos - z*sin;
+		zp = x*sin + z*cos;
+		return new Vector2d(xp,zp);
 	}
 	
 	private Vector2d getReverseRotatedCoordinates(Vector2d vec) {
-		double x = vec.getX();
+		double x = vec.getX(); double xp,zp;
 		double z = vec.getY();
-		x = x*rcos - z*rsin;
-		z = x*rsin + z*rcos;
-		return new Vector2d(x,z);
+		xp = x*rcos - z*rsin;
+		zp = x*rsin + z*rcos;
+		return new Vector2d(xp,zp);
 	}
 	
 	

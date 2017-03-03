@@ -15,8 +15,12 @@ public class NoiseMapFactory {
 		return new MultiFrequencySimplexNoise(frequencies,weight,seed);
 	}
 	
-	public static NoiseMap getOffsetNoiseMap(NoiseMap map, double offset, double multiplier) {
+	public static NoiseMap getMultiplierNoiseMap(NoiseMap map, double offset, double multiplier) {
 		return new ImplementedMap(map,offset,multiplier);
+	}
+	
+	public static NoiseMap getPrototypeNoiseMap() {
+		return new PrototypeMap();
 	}
 	
 	static NoiseMap SimpleSimplexMap(double frequencies,double weight,long seed) {

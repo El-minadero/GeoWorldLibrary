@@ -7,17 +7,22 @@ class Ellipse extends Shape implements Region {
 
 	private final double a;
 	private final double b;
+	private final double a2;
+	private final double b2;
 
 	Ellipse(Vector2i center, double majorAxis, double minorAxis, double angleToNorth) {
 		super(center, angleToNorth, RegionTypes.ELLIPSE);
 		a = majorAxis;
 		b = minorAxis;
+		a2 = a*a;
+		b2 = b*b;
 	}
+
 	
 	protected double getDistanceToLocalEdge(Vector2d vec) {
 		double x = Math.abs(vec.getX())/a;
 		double z = Math.abs(vec.getY())/b;
-		return 1 - (x*x + z*z);
+		return Math.abs(1 - (x*x + z*z));
 	}
 
 	@Override
@@ -49,4 +54,5 @@ class Ellipse extends Shape implements Region {
         return user.hashCode()==user.hashCode();
     }
 
+	
 }
