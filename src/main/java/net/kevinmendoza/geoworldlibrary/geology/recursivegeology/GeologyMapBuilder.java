@@ -4,13 +4,12 @@ import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologicalFacto
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
 
 public interface GeologyMapBuilder {
-	public static interface MapBuilder {
 
-		GeologyPrototype getPrototype();
-		int getSpacing();
-		double getFrequency();
-		Order getOrder();
-		long getSeed();
-		GeologyFactory getFactory();
-	}
+	GeologyPrototype getPrototype();
+	int getSpacing();
+	double getFrequency();
+	Order getOrder();
+	long getSeed();
+	GeologyFactory getFactory();
+
 }

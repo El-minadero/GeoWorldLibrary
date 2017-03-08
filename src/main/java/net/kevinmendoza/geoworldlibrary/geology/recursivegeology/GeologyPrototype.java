@@ -3,18 +3,16 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GeologyInterface.Alteration;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GeologyInterface.Replacement;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GeologyInterface.Surface;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.other.GeologyData;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.other.GeologyDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydata.GeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydata.GeologyDataContainer;
+import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydata.GeologyDataFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModificationFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionFactory;
 
-public abstract class GeologyPrototype implements GeologyObject {
+public abstract class GeologyPrototype implements CompositeGeologyInterface {
 	
 	public static interface PrototypeBuilder {
 		Region getRegion();
@@ -36,23 +34,36 @@ public abstract class GeologyPrototype implements GeologyObject {
 		order		  = builder.getOrder();
 		region = RegionFactory.MakeRegionOffsetByMap(builder.getRegion(),builder.getOffsetMap());
 	}
-	protected abstract GeologyData<Surface> getSurfaceData(Vector2i query);
-	protected abstract GeologyData<Alteration> getAlterationData(Vector3i query);
-	protected abstract GeologyData<Replacement> getReplacementData(Vector3i query);
 	
-	public final GeologyData<Surface> getSurface(Vector2i query) {
-		GeologyData<Surface> data = getSurfaceData(query);
-		return GeologyDataFactory.<Surface>GetGeologyDataWithData(order,data);
+	public GeologyPrototype(Order order) {
+		INTERNAL_DECAY= 0;
+		EXTERNAL_DECAY= 0;
+		this.order    = order;
+		region 		  = null;
 	}
 	
-	public final GeologyData<Alteration> getAlteration(Vector3i query) {
-		GeologyData<Alteration> data = getAlterationData(query);
-		return GeologyDataFactory.<Alteration>GetGeologyDataWithData(order,data);
+	protected abstract <T extends GeologyData<T>> T getGeologyData(Class<T> t, Vector2i query);
+	protected abstract <T extends GeologyData<T>> T getGeologyData(Class<T> t, Vector3i query);
+	
+	public <T extends GeologyData<T>> GeologyDataContainer<T> get2DGeologyData(Class<T> t,Vector2i query) {
+		T data = this.<T>getGeologyData(t,query);
+		return GeologyDataFactory.<T>CreateGeologyDataContainer(order,data);
 	}
 	
-	public final GeologyData<Replacement> getReplacement(Vector3i query) {
-		GeologyData<Replacement> data = getReplacementData(query);
-		return GeologyDataFactory.<Replacement>GetGeologyDataWithData(order,data);
+	public <T extends GeologyData<T>> GeologyDataContainer<T> get3DGeologyData(Class<T> t,Vector3i query) {
+		T data = this.<T>getGeologyData(t,query);
+		return GeologyDataFactory.<T>CreateGeologyDataContainer(order,data);
+	}
+	
+	public double getDecay(Vector3i vec) {
+		return getDecay(PointModificationFactory.extract2iVector(vec));
+	}
+	
+	public double getDecay(Vector2i vec) {
+		if(isVectorInRegion(vec))
+			return getInternalDecay(vec);
+		else
+			return getExternalDecay(vec);
 	}
 
 	private double getDecayMult(double decay, Vector2i vec) {
@@ -87,7 +98,7 @@ public abstract class GeologyPrototype implements GeologyObject {
 		return region;
 	}
 
-	public final boolean isPrototype() { return true; }
+	public final boolean isLeaf() { return true; }
 	
 
 	@Override
@@ -99,10 +110,6 @@ public abstract class GeologyPrototype implements GeologyObject {
 	@Override
 	public final boolean isVectorInRegion(Vector3i query) {
 		return getSuperRegion().isInside(PointModificationFactory.extract2iVector(query));
-	}
-	
-	public boolean shouldBuildRegion(Vector2i vec) {
-		return true;
 	}
 
 }

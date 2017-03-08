@@ -1,15 +1,14 @@
 package net.kevinmendoza.geoworldlibrary.geology.test;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 
-import net.kevinmendoza.geoworldlibrary.geology.test.TestParameters.MapParameters;
-import net.kevinmendoza.geoworldlibrary.geology.test.TestParameters.TestMapParameters;
-
-public class ParameterBind extends AbstractModule {
+public class ParameterBind extends AbstractModule implements Module {
 
 	@Override
 	protected void configure() {
-		bind(MapParameters.class).to(TestMapParameters.class);
+		// TODO Auto-generated method stub
+
 	}
 
 }

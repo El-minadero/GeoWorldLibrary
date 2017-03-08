@@ -20,7 +20,7 @@ public class PointModificationFactory {
 		return new Vector2i(vec.getX(),vec.getZ());
 	}
 	
-	public static Vector3i make3iVector(Vector2i vec,int y) {
+	public static Vector3i MakeVector3i(Vector2i vec,int y) {
 		return new Vector3i(vec.getX(),y,vec.getY());
 	}
 	
