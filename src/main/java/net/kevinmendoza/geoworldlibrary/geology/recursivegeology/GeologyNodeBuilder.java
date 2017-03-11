@@ -1,14 +1,12 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologicalFactory.GeologyFactory;
-
-public class GeologyNodeBuilder {
+public final class GeologyNodeBuilder {
 	
-	private CompositeGeologyInterface prototype;
+	private GeologyComposite prototype;
 	private int number;
-	private GeologyFactory factory;
+	private AbstractPrototypeFactory factory;
 
-	public GeologyNodeBuilder setPrototype(CompositeGeologyInterface prototype) {
+	public GeologyNodeBuilder setPrototype(GeologyComposite prototype) {
 		this.prototype = prototype;
 		return this;
 	}
@@ -18,15 +16,15 @@ public class GeologyNodeBuilder {
 		return this;
 	}
 
-	public GeologyNodeBuilder setFactory(GeologyFactory factory) {
+	public GeologyNodeBuilder setFactory(AbstractPrototypeFactory factory) {
 		this.factory = factory;
 		return this;
 	}
 
 	public GeologyNode build() { return new GeologyNode(this); }
 
-	CompositeGeologyInterface getPrototype() { return prototype;}
-	GeologyFactory getFactory()     { return factory;  }
+	GeologyComposite getPrototype() { return prototype;}
+	AbstractPrototypeFactory getFactory()     { return factory;  }
 	int getSubObjectNumber()		{ return number;   }
 
 }

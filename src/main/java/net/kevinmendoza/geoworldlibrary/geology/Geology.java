@@ -12,8 +12,8 @@ public interface Geology {
 	
 	public void primeGeneration(GenerationData metaData);
 	
-	public <T extends GeologyData<T>> GeologyDataContainer<T> get2DGeologyData(Class<T> t, Vector2i surface);
+	public <T extends GeologyData<T>> GeologyDataContainer<T> get2DGeologyData(T t, Vector2i surface);
 	
-	public <T extends GeologyData<T>> GeologyDataContainer<T>  get3DGeologyData(Class<T> t,Vector3i query);
+	public <T extends GeologyData<T>> GeologyDataContainer<T>  get3DGeologyData(T t,Vector3i query);
 	
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.flowpowered.math.vector.Vector2i;
 
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologicalFactory.GeologyFactory;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GenerationData;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.PointGeneratorFactory;
@@ -20,7 +19,7 @@ final class GeologyMap extends AbstractGeologyNode {
 
 	private PointGeneratorInterface pointQuery;
 	private GeologyMapCache regionCache;
-	private GeologyFactory factory;
+	private AbstractPrototypeFactory factory;
 	
 	GeologyMap(GeologyMapBuilder builder) {
 		super(builder.getPrototype());
@@ -52,14 +51,14 @@ final class GeologyMap extends AbstractGeologyNode {
 			}
 		}
 		List<Vector2i> surroundingKeys  = pointQuery.getFlooredCenterNeighborhood(center);
-		addToInternalList(regionCache.getInternalRegions(surroundingKeys,center));
-		addToInternalList(regionCache.getExternalRegions(surroundingKeys,center));
+		setInternalList(regionCache.getInternalRegions(surroundingKeys,center));
+		setExternalList(regionCache.getExternalRegions(surroundingKeys,center));
 		primeGenerationList(data);
 	}
 
 	private boolean shouldBuildRegion(Vector2i vec) { return canBuildRegion(vec); }
 
-	private GeologyNode buildGeologicRegionObject(Vector2i vec) {
+	private GeologyComposite buildGeologicRegionObject(Vector2i vec) {
 		Region region = factory.makeRegion(vec);
 		return factory.makePrototype(region);
 	}

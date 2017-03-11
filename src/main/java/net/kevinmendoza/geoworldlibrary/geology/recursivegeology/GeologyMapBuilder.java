@@ -1,6 +1,5 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologicalFactory.GeologyFactory;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
 
 public interface GeologyMapBuilder {
@@ -10,6 +9,6 @@ public interface GeologyMapBuilder {
 	double getFrequency();
 	Order getOrder();
 	long getSeed();
-	GeologyFactory getFactory();
+	AbstractPrototypeFactory getFactory();
 
 }

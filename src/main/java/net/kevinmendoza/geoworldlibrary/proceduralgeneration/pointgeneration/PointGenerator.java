@@ -7,6 +7,7 @@ import com.flowpowered.math.vector.Vector2i;
 
 public class PointGenerator implements PointGeneratorInterface {
 
+	private static long PRIME = 7;
 	private final double SPACING;
 	private final long SEED;
 	private static final int[] X = {0,-1,-1,-1, 0, 1,1,1};
@@ -40,7 +41,9 @@ public class PointGenerator implements PointGeneratorInterface {
 	
 	@Override
 	public Vector2i getFullCenter(Vector2i vec) {
-		Random rand = new Random(vec.hashCode()^SEED);
+		long i = (vec.getX() * 661) + (vec.getY() * 701) % (1024+ SEED);
+		Random rand = new Random(i);
+		rand.nextDouble();
 		return new Vector2i(rand.nextDouble()*SPACING + vec.getX()*SPACING,
 										   rand.nextDouble()*SPACING + vec.getY()*SPACING);
 	}

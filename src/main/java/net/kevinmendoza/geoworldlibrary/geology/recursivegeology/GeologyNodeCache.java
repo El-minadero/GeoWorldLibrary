@@ -7,13 +7,12 @@ import java.util.List;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologicalFactory.GeologyFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
 
 class GeologyNodeCache {
 
-	private HashMap<Region,CompositeGeologyInterface> geoMap;
-	private GeologyFactory factory;
+	private HashMap<Region,GeologyComposite> geoMap;
+	private AbstractPrototypeFactory factory;
 	
 	/**
 	 * 
@@ -21,7 +20,7 @@ class GeologyNodeCache {
 	 * @param subObjects number of sub objects to make
 	 * @param superRegion number of regions to make
 	 */
-	public GeologyNodeCache(GeologyFactory factory, int subObjects,Region superRegion) {
+	public GeologyNodeCache(AbstractPrototypeFactory factory, int subObjects,Region superRegion) {
 		this.factory = factory;
 		geoMap = new HashMap<>();
 		populateSubRegions(subObjects,superRegion);
@@ -30,7 +29,7 @@ class GeologyNodeCache {
 	private void populateSubRegions(int subObjects, Region superRegion) {
 		for(int i = 0; i<subObjects;i++) {
 			Region subRegion = factory.makeRegion(superRegion.getRandomInternalPoint());
-			CompositeGeologyInterface obj = factory.makePrototype(subRegion);
+			GeologyComposite obj = factory.makePrototype(subRegion);
 			geoMap.put(obj.getSuperRegion(), obj);
 		}
 	}
@@ -44,11 +43,11 @@ class GeologyNodeCache {
 		return false;
 	}
 	
-	public List<CompositeGeologyInterface> getOverlappingObjects(Vector2i check) {
-		List<CompositeGeologyInterface> potentialVectors = new ArrayList<>();
+	public List<GeologyComposite> getOverlappingObjects(Vector2i check) {
+		List<GeologyComposite> potentialVectors = new ArrayList<>();
 		for(Region reg : geoMap.keySet()) {
 			if(reg.isInside(check)){
-				CompositeGeologyInterface temp= geoMap.get(reg);
+				GeologyComposite temp= geoMap.get(reg);
 				if(temp.isLeaf()) {
 					temp = factory.makeObject((GeologyPrototype)(temp));
 					geoMap.put(reg, temp);
@@ -59,9 +58,9 @@ class GeologyNodeCache {
 		return potentialVectors;
 	}
 
-	public List<CompositeGeologyInterface> getDistantObjects(
+	public List<GeologyComposite> getDistantObjects(
 			Vector2i center) {
-		List<CompositeGeologyInterface> potentialVectors = new ArrayList<>();
+		List<GeologyComposite> potentialVectors = new ArrayList<>();
 		for(Region reg : geoMap.keySet()) {
 			if(!reg.isInside(center)){
 				potentialVectors.add(geoMap.get(reg));
@@ -70,11 +69,11 @@ class GeologyNodeCache {
 		return potentialVectors;
 	}
 
-	public List<CompositeGeologyInterface> getOverlappingObjects(Vector3i query) {
+	public List<GeologyComposite> getOverlappingObjects(Vector3i query) {
 		return getOverlappingObjects(new Vector2i(query.getX(),query.getZ()));
 	}
 
-	public List<CompositeGeologyInterface> getDistantObjects(
+	public List<GeologyComposite> getDistantObjects(
 			Vector3i query) {
 		return getDistantObjects(new Vector2i(query.getX(),query.getZ()));
 	}

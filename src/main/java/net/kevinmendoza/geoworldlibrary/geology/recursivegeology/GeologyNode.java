@@ -6,9 +6,9 @@ import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GenerationData;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModificationFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
 
-public class GeologyNode extends AbstractGeologyNode implements CompositeGeologyInterface {
+class GeologyNode extends AbstractGeologyNode implements GeologyComposite {
 
-	private final CompositeGeologyInterface prototype;
+	private final GeologyComposite prototype;
 	private final GeologyNodeCache map;
 
 	GeologyNode(GeologyNodeBuilder builder) {
@@ -28,8 +28,8 @@ public class GeologyNode extends AbstractGeologyNode implements CompositeGeology
 		clearSubObjectList();
 		Vector2i query = metaData.get2DCoordinate();
 		if(isVectorInRegion(query)) {
-			this.addToInternalList(map.getOverlappingObjects(query));
-			this.addToExternalList(map.getDistantObjects(query));
+			setInternalList(map.getOverlappingObjects(query));
+			setExternalList(map.getDistantObjects(query));
 		}
 		primeGenerationList(metaData);
 	}

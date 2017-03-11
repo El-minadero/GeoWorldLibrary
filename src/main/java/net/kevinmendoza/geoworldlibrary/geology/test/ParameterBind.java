@@ -7,8 +7,8 @@ public class ParameterBind extends AbstractModule implements Module {
 
 	@Override
 	protected void configure() {
-		// TODO Auto-generated method stub
-
+		bind(ObjectParameters.class).to(Object1Parameters.class);
+		bind(ObjectParameters2.class).to(Object2Parameters.class);
 	}
 
 }

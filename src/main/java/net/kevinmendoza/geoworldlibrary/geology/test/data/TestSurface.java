@@ -1,13 +1,14 @@
 package net.kevinmendoza.geoworldlibrary.geology.test.data;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydata.GeologyData;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydatainterface.Surface;
-class TestSurface implements Surface {
+class TestSurface extends Surface {
 
 	private int height;
 
 	public TestSurface(int height) {
 		this.height = height;
 	}
+
 	
 	@Override
 	public Surface get() {
@@ -16,8 +17,7 @@ class TestSurface implements Surface {
 
 	@Override
 	public void merge(GeologyData<Surface> t, double mergeWeight) {
-		Surface surface = t.get();
-		height = (int)((1-mergeWeight)*(double)(height) + mergeWeight*(double)(surface.getHeight()));
+		height = (int) weightedCompare(height, t.get().getHeight(), mergeWeight);
 	}
 
 	@Override

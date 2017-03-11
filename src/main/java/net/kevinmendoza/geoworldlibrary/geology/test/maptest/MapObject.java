@@ -30,24 +30,24 @@ final class MapObject extends GeologyPrototype {
 	}
 
 	@Override
-	protected <T extends GeologyData<T>> T getGeologyData(Class<T> t,
+	protected <T extends GeologyData<T>> T getGeologyData(T t,
 			Vector2i query) {
-		if(t.isInstance(Surface.class)) {
-			double height = offsetMap.getNoise(query);
-			return (T)DataFactory.CreateSurfaceInstance((int)height);
+		if(t.getName().equals(DataFactory.GetEmptySurfaceInstance().getName())) {
+			double height = 10;// offsetMap.getNoise(query);
+			return (T) DataFactory.CreateSurfaceInstance((int)height);
 		}
 		return null;
 	}
 
 	@Override
-	protected <T extends GeologyData<T>> T getGeologyData(Class<T> t,
+	protected <T extends GeologyData<T>> T getGeologyData(T t,
 			Vector3i query) {
 		return null;
 	}
 	
 	@Override
 	public boolean shouldBuildRegion(Vector2i vec) {
-		return false;
+		return true;
 	}
 
 }

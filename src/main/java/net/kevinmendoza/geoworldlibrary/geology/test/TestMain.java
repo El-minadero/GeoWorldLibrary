@@ -2,6 +2,7 @@ package net.kevinmendoza.geoworldlibrary.geology.test;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,26 +14,30 @@ import net.kevinmendoza.geoworldlibrary.geology.Geology;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydata.GeologyDataContainer;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydatainterface.Surface;
+import net.kevinmendoza.geoworldlibrary.geology.test.data.DataFactory;
 
 public class TestMain {
 
 	public static void main(String[] args) {
 		BufferedImage img = new BufferedImage(251,251,BufferedImage.TYPE_INT_RGB);
-		TestFactoryHub.setSeed(10);
-		Geology geology = TestFactoryHub.getMapFactory().createGeologyMap();
+		ObjectParameters p = new Object1Parameters();
+		TestFactoryHub.setSeed(101);
+		Geology geology = TestFactoryHub.GetMapFactory().createGeologyMap();
 		System.out.println("Starting test.");
 		long start = System.nanoTime();
 		long totalIterations = 0;
 		for(int x=0;x<250;x++) {
 			for(int z=0;z<250;z++) {
 				totalIterations++;
-				Vector2i testPoint = new Vector2i(x*40,z*40);
+				Vector2i testPoint = new Vector2i(x*90,z*90);
 				PrimeData data = new PrimeData(testPoint); 
 				geology.primeGeneration(data);
-				GeologyDataContainer<Surface> container = geology.<Surface>get2DGeologyData(Surface.class, testPoint);
+				GeologyDataContainer<Surface> container = geology
+						.<Surface>get2DGeologyData(DataFactory.GetEmptySurfaceInstance(), testPoint);
 				Surface surf = container.getObject(Order.FIRST);
-				int rgb = (surf.getHeight() + 100)/3;
-				img.setRGB(x,z,rgb);
+				int h = surf.getHeight();
+				Color color = new Color(h,h,h);
+				img.setRGB(x,z,color.getRGB());
 			}
 		}
 		long end = System.nanoTime();

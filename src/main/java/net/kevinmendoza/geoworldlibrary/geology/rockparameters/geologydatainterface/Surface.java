@@ -2,7 +2,11 @@ package net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydatainter
 
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.geologydata.GeologyData;
 
-public interface Surface extends GeologyData<Surface> {
+public abstract class Surface extends Comparison implements GeologyData<Surface> {
 
-	int getHeight();
+	public abstract int getHeight();
+	
+	public String getName() {
+		return "surface";
+	}
 }

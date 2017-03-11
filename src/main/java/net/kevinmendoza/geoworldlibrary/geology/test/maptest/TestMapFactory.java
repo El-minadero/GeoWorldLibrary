@@ -1,15 +1,16 @@
 package net.kevinmendoza.geoworldlibrary.geology.test.maptest;
 
 import net.kevinmendoza.geoworldlibrary.geology.Geology;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologicalFactory.GeologyFactory;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologicalFactory.GeologyMapFactory;
+import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.AbstractMapFactory;
+import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.AbstractPrototypeFactory;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologyMapBuilder;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.GeologyPrototype;
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
+import net.kevinmendoza.geoworldlibrary.geology.test.TestFactoryHub;
 
-public class TestMapFactory extends GeologyMapFactory {
+public class TestMapFactory extends AbstractMapFactory {
 
-	private final int SPACING = 50;
+	private final int SPACING = 5000;
 	private final int Frequency = 0;
 	private final Order order = Order.FIRST;
 	
@@ -19,7 +20,7 @@ public class TestMapFactory extends GeologyMapFactory {
 				.setSpacing(SPACING)
 				.setFrequency(Frequency)
 				.setSeed(getSeed())
-				.setFactory(null)
+				.setFactory(TestFactoryHub.GetObject1Factory())
 				.setOrder(order)
 				.setPrototype(new MapObject());
 		return makeGeologyMap(b);
@@ -31,7 +32,7 @@ public class TestMapFactory extends GeologyMapFactory {
 		private double freq;
 		private Order order;
 		private long seed;
-		private GeologyFactory factory;
+		private AbstractPrototypeFactory factory;
 		private GeologyPrototype prototype;
 		
 		private Builder setPrototype(GeologyPrototype prototype) {this.prototype = prototype; return this;}
@@ -39,13 +40,13 @@ public class TestMapFactory extends GeologyMapFactory {
 		private Builder setOrder(Order order)    {this.order = order; return this; }
 		private Builder setFrequency(double freq) {this.freq = freq; return this; }
 		private Builder setSeed(long seed) 		{this.seed = seed; return this; }
-		private Builder setFactory(GeologyFactory factory) { this.factory = factory; return this; }
+		private Builder setFactory(AbstractPrototypeFactory factory) { this.factory = factory; return this; }
 	
 		public int getSpacing() { return spacing; }
 		public double getFrequency() { return freq; }
 		public Order getOrder() { return order;  }
 		public long getSeed() { return seed; }
-		public GeologyFactory getFactory() { return factory;}
+		public AbstractPrototypeFactory getFactory() { return factory;}
 		public GeologyPrototype getPrototype() { return prototype;  }
 		
 	}
