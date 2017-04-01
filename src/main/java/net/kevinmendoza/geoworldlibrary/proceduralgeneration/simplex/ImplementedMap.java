@@ -7,19 +7,17 @@ import com.flowpowered.math.vector.Vector3i;
 
 class ImplementedMap implements NoiseMap{
 
-	private NoiseMap map;
-	private double multiplier;
-	private double offset;
+	private final NoiseMap map;
+	private final double multiplier;
 	
-	ImplementedMap(NoiseMap map, double offset, double multiplier) {
+	ImplementedMap(NoiseMap map, double multiplier) {
 		this.map = map;
-		this.offset = offset;
 		this.multiplier = multiplier;
 	}
 	
 	@Override
 	public double getNoise(double x, double y, double z) {
-		return map.getNoise(x, y, z)*multiplier + offset;
+		return map.getNoise(x, y, z)*multiplier;
 	}
 	
 	@Override

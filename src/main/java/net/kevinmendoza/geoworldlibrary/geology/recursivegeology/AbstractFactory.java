@@ -11,6 +11,10 @@ abstract class AbstractFactory {
 		this.random  = new Random(SEED);
 	}
 	
+	protected long createVectorSeed(int hashCode) {
+		return hashCode^SEED;
+	}
+	
 	protected final long getSeed() {return SEED;}
 	protected final Random getRandom() { return random;}
 }

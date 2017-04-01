@@ -2,90 +2,129 @@ package net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes;
 
 import java.util.Random;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
+
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector2i;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.RandomInterface;
-abstract class Shape implements RandomInterface {
+import com.flowpowered.math.vector.Vector3d;
+import com.flowpowered.math.vector.Vector3i;
 
-	private final int PRIME = 41;
-	private final Vector2i center;
-	private final double cos;
-	private final double sin;
-	private final double rcos;
-	private final double rsin;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.RandomInterface;
+ 
+abstract class Shape implements Region,RandomInterface {
+	protected final int PRIME = 41;
 	private final RegionTypes type;
-	protected final Random rand;
+	private Rotation rotation;
+	private final double yVal;
 	
-	Shape(Vector2i center,double rotation,RegionTypes type){
+	Shape(RegionTypes type,double yVal){
 		this.type = type;
-		this.center = center;
-		this.rand = new Random(center.hashCode()^type.ordinal());
-		this.cos = Math.cos(rotation);
-		this.sin = Math.sin(rotation);
-		this.rcos = Math.cos(-rotation);
-		this.rsin = Math.sin(-rotation);
+		this.rotation =initEmptyRotation();
+		this.yVal = yVal;
+	}
+	Shape(RegionTypes type){
+		this.type = type;
+		this.rotation =initEmptyRotation();
+		this.yVal = 0;
 	}
 	
-	public int getInt(int i) { return rand.nextInt(i); }
-	public double getDouble() { return rand.nextDouble(); }
+	private Rotation initEmptyRotation() {
+		return new Rotation(RotationOrder.YXZ,RotationConvention.FRAME_TRANSFORM,0,0,0);
+	}
+	protected void setRotation(Rotation rot) {
+		this.rotation = rot;
+	}
+	public abstract int getInt(int i);
+	public abstract double getDouble();
 	
-	public boolean isInside(Vector2i vec) {
+	protected abstract boolean isInBoundingBox(Vector2d vec);
+	protected abstract boolean isInBoundingBox(Vector3d vec);
+
+	protected abstract Vector2i createOffsetPoint(Vector2d vec);
+	protected abstract Vector2d getRandLocalPoint();
+	
+	protected abstract boolean isLocallyInside(Vector3d vec);
+	protected abstract boolean isLocallyInside(Vector2d vec);
+	
+	protected abstract Vector2d getRelativeCoordinates(Vector2d vec);
+	protected abstract Vector3d getRelativeCoordinates(Vector3d vec);
+	
+	protected abstract double getDistanceToLocalEdge(Vector3d vec);
+	protected abstract double getDistanceToLocalEdge(Vector2d vec);
+
+	public abstract int hashCode();
+	public abstract String toString();
+	
+	protected final Vector2d getRotatedCoordinates(Vector2d vec) {
+		double[] tempVec = { vec.getX(),yVal,vec.getY() };
+		rotation.applyTo(tempVec, tempVec);
+		return new Vector2d(tempVec[0],tempVec[2]);
+	}
+	protected final Vector3d getRotatedCoordinates(Vector3d vec) {
+		double[] tempVec = { vec.getX(),vec.getY(),vec.getZ() };
+		rotation.applyTo(tempVec, tempVec);
+		return new Vector3d(tempVec[0],tempVec[1],tempVec[2]);
+	}
+	
+	protected final Vector2d getReverseRotatedCoordinates(Vector2d vec) {
+		double[] tempVec = { vec.getX(),yVal,vec.getY() };
+		rotation.applyInverseTo(tempVec, tempVec);
+		return new Vector2d(tempVec[0],tempVec[2]);
+	}
+	protected final Vector3d getReverseRotatedCoordinates(Vector3d vec) {
+		double[] tempVec = { vec.getX(),vec.getY(),vec.getZ() };
+		rotation.applyInverseTo(tempVec, tempVec);
+		return new Vector3d(tempVec[0],tempVec[1],tempVec[2]);
+	}
+
+	public final RegionTypes getType() { return type; }
+	protected final int getPrime() { return PRIME; }
+	
+	public final  boolean isInside(Vector2i vec) {
 		Vector2d relative = getRelativeCoordinates(vec.toDouble());
 		Vector2d rotated  = getRotatedCoordinates(relative);
-		return isLocallyInside(rotated); 
+		if(isInBoundingBox(rotated))
+			return isLocallyInside(rotated); 
+		else
+			return false;
+	}
+	public final  boolean isInside(Vector3i vec) {
+		Vector3d relative = getRelativeCoordinates(vec.toDouble());
+		Vector3d rotated  = getRotatedCoordinates(relative);
+		if(isInBoundingBox(rotated))
+			return isLocallyInside(rotated); 
+		else
+			return false;
 	}
 	
-	public Vector2i getRandomInternalPoint() {
+	public final Vector2i getRandomInternalPoint() {
 		Vector2d relative = getRandLocalPoint();
 		Vector2d rotated  = getReverseRotatedCoordinates(relative);
-		return new Vector2i(rotated.getX()+center.getX(),rotated.getY() + center.getY()); 
+		return createOffsetPoint(rotated);
 	}
 	
-	public double getNormalizedDistanceToEdge(Vector2i vec) {
+	public final double getNormalizedDistanceToEdge(Vector2i vec) {
 		Vector2d relative = getRelativeCoordinates(vec.toDouble());
 		Vector2d rotated  = getRotatedCoordinates(relative);
 		return getDistanceToLocalEdge(rotated);
 	}
 	
-	protected abstract double getDistanceToLocalEdge(Vector2d vec);
-	protected abstract Vector2d getRandLocalPoint();
-	protected abstract boolean isLocallyInside(Vector2d vec);
-	
-	
-	protected Vector2i getCenter() {
-		return new Vector2i(center);
-	}
-	
-	private Vector2d getRelativeCoordinates(Vector2d vec) {
-		return new Vector2d(vec.getX() - center.getX(), vec.getY() - center.getY());
-	}
-
-	private Vector2d getRotatedCoordinates(Vector2d vec) {
-		double x = vec.getX(); double xp,zp;
-		double z = vec.getY();
-		xp = x*cos - z*sin;
-		zp = x*sin + z*cos;
-		return new Vector2d(xp,zp);
-	}
-	
-	private Vector2d getReverseRotatedCoordinates(Vector2d vec) {
-		double x = vec.getX(); double xp,zp;
-		double z = vec.getY();
-		xp = x*rcos - z*rsin;
-		zp = x*rsin + z*rcos;
-		return new Vector2d(xp,zp);
-	}
-	
-	
-	@Override 
-	public int hashCode() {
-		int center = this.center.hashCode()*PRIME;
-		center^=type.hashCode();
-		return center;
+	public final double getNormalizedDistanceToEdge(Vector3i vec) {
+		Vector3d relative = getRelativeCoordinates(vec.toDouble());
+		Vector3d rotated  = getRotatedCoordinates(relative);
+		return getDistanceToLocalEdge(rotated);
 	}
 	
 	@Override
-	public String toString() {
-		return type.toString() + " " + center.toString();
+	public Vector2i getModifiedPoint(Vector2i vec) {
+		return vec;
 	}
+
+	@Override
+	public Vector3i getModifiedPoint(Vector3i vec) {
+		return vec;
+	}
+	
 }

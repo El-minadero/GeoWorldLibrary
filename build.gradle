@@ -15,8 +15,15 @@ repositories {
         name = 'sponge'
         url = 'http://repo.spongepowered.org/maven'
     }
+     maven {
+        name = 'commons-math3'
+        url = 'https://mvnrepository.com/artifact/org.apache.commons/commons-math3'
+    }
 }
 
 dependencies {
     compile 'org.spongepowered:spongeapi:5.0.0'
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 }
+
+

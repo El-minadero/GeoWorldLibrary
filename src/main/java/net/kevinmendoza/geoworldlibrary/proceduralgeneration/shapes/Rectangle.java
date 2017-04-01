@@ -2,8 +2,12 @@ package net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes;
 
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector2i;
+import com.flowpowered.math.vector.Vector3d;
+import com.flowpowered.math.vector.Vector3i;
 
-class Rectangle extends Shape implements Region {
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifierFactory;
+
+class Rectangle extends Shape2D {
 
 	private final double a;
 	private final double b;
@@ -11,7 +15,7 @@ class Rectangle extends Shape implements Region {
 	private final double b_2;
 
 	Rectangle(Vector2i center,double xAxis, double yAxis, double angleToNorth) {
-		super(center,angleToNorth,RegionTypes.RECTANGLE);
+		super(center,angleToNorth,RegionTypes.RECTANGLE,xAxis,yAxis);
 		a = xAxis;
 		b = yAxis;
 		a_2 = xAxis/2;
@@ -54,4 +58,15 @@ class Rectangle extends Shape implements Region {
 		Rectangle user = (Rectangle) o;
 		return user.hashCode() == user.hashCode();
 	}
+
+	@Override
+	protected boolean isLocallyInside(Vector3d vec) {
+		return isLocallyInside(new Vector2d(vec.getX(),vec.getZ()));
+	}
+
+	@Override
+	protected double getDistanceToLocalEdge(Vector3d vec) {
+		return getDistanceToLocalEdge(new Vector2d(vec.getX(),vec.getY()));
+	}
+	
 }

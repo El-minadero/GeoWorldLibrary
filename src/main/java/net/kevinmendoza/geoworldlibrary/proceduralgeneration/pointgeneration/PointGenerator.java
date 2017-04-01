@@ -10,8 +10,8 @@ public class PointGenerator implements PointGeneratorInterface {
 	private static long PRIME = 7;
 	private final double SPACING;
 	private final long SEED;
-	private static final int[] X = {0,-1,-1,-1, 0, 1,1,1};
-	private static final int[] Z = {1, 1, 0,-1,-1,-1,0,1};
+	private static final int[] X = {0,-1,-1,-1, 0, 1,1,1,-2,-2,-2 ,2,2,2 , -1,0,1 -1,0,1  };
+	private static final int[] Z = {1, 1, 0,-1,-1,-1,0,1,-1,0,1   ,-1,0,1,  2,2,2,-2,-2,-2};
 	
 	private PointGenerator(PointGeneratorBuilder pointGeneratorBuilder) {
 		SPACING = pointGeneratorBuilder.spacing;
@@ -23,7 +23,7 @@ public class PointGenerator implements PointGeneratorInterface {
 									   Math.floor((double)(vec.getY())/SPACING));
 		List<Vector2i> surroundingCenters = new ArrayList<Vector2i>(8);
 		surroundingCenters.add(center);
-		for(int i =0;i<8;i++){
+		for(int i =0;i<19;i++){
 			surroundingCenters.add(new Vector2i(X[i]+center.getX(),Z[i]+center.getY()));
 		}
 		return surroundingCenters;

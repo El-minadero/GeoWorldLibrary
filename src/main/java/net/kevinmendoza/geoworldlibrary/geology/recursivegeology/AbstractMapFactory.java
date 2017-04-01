@@ -1,11 +1,11 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
-import net.kevinmendoza.geoworldlibrary.geology.Geology;
-
 public abstract class AbstractMapFactory extends AbstractFactory {
-	public abstract Geology createGeologyMap();
+	public abstract IGeology createGeologyMap();
+	public abstract IGeology createDebuggedGeologyMap();
 	
-	protected final Geology makeGeologyMap(GeologyMapBuilder builder) {
-		return new GeologyMap(builder);
+	protected final IGeology makeGeologyMap(IGeologyMapBuilder builder) {
+		return new Map(builder);
 	}
+	
 }
