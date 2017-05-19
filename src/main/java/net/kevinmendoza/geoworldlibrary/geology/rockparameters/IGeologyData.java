@@ -7,6 +7,8 @@ public interface IGeologyData {
 	void merge(IGeologyData data,double mergeWeight);
 	void merge(IGeologyData data);
 	
+	IGeologyData copy();
+	
 	boolean isEmpty();
 	
 	boolean isLeaf();

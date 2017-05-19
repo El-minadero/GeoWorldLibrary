@@ -5,7 +5,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-class ImplementedMap implements NoiseMap{
+class ImplementedMap extends AbstractMap {
 
 	private final NoiseMap map;
 	private final double multiplier;

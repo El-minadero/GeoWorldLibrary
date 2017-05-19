@@ -33,7 +33,7 @@ final class Map extends AbstractNode {
 		FREQUENCY       = builder.getFrequency();
 		SEED	  		= builder.getSeed();
 		debugMode 		= builder.debugMode();
-		regionCache 	= new MapCache(factory,debugMode);
+		regionCache 	= new MapCache(factory);
 		pointQuery 		= PointGeneratorFactory.makePointGenerator(SEED,(int)SPACING);
 	}
 	public final void setSeed(long seed) {

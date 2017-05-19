@@ -14,8 +14,9 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.P
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionPointGenerator;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMap;
 
-public abstract class AbstractPrototype extends AbstractPointModifier {
+public abstract class AbstractPrototype extends AbstractControlRegion {
 	
 	private final double INTERNAL_DECAY;
 	private final double EXTERNAL_DECAY;
@@ -23,11 +24,11 @@ public abstract class AbstractPrototype extends AbstractPointModifier {
 	private final int SUB_ORDER;
 	private final Region region;
 	private final Order order;
-	private final PointModifier pointModifier;
+	private final NoiseMap controlMap;
 
 	public AbstractPrototype(IPrototypeBuilder builder) {
-		super(builder.getPointModifierMap());
-		pointModifier = builder.getPointModifierMap();
+		super(builder.getControlMap());
+		controlMap = builder.getControlMap();
 		SUB_ORDER = TOTAL;
 		TOTAL++;
 		INTERNAL_DECAY= builder.getInternalDecayConstant();
@@ -40,34 +41,39 @@ public abstract class AbstractPrototype extends AbstractPointModifier {
 	}
 	
 	public AbstractPrototype(Order order) {
-		super(PointModifierFactory.CreateNullPointOffset());
-		pointModifier = PointModifierFactory.CreateNullPointOffset();
+		super();
 		SUB_ORDER = TOTAL;
 		TOTAL++;
 		INTERNAL_DECAY= 1;
 		EXTERNAL_DECAY= 1;
 		this.order    = order;
 		region 		  = null;
+		controlMap = null;
 	}
-	public PointModifier getPointModifier() {
-		return pointModifier;
-	}
+	
+	public NoiseMap getControlMap() { return controlMap; }
 	
 	protected abstract IGeologyData getGeologyData(IGeologyData testData, Vector2i query);
 	protected abstract IGeologyData getGeologyData(IGeologyData testData, Vector3i query);
 
-	protected final IGeologyData getProtected2DGeologyData(IGeologyData t,Vector2i query) { 
-		IGeologyData data = getGeologyData(t,query);
-		if(region!=null && !region.isInside(query)) {
-			data.applyMultiplier(getExternalDecay(query));
+	protected final IGeologyData getProtected2DGeologyData(IGeologyData t,Vector2i vec) { 
+		IGeologyData data = getGeologyData(t,vec);
+		if(region!=null) {
+			if(!region.isInside(vec)) {
+				data.applyMultiplier(getPrototypeExternalDecay(vec));
+			}
+			data.applyMultiplier(getControlMapDecay(vec));
 		}
 		return data;
 	}
 	
-	protected final IGeologyData getProtected3DGeologyData(IGeologyData t,Vector3i query) { 
-		IGeologyData data = getGeologyData(t,query);
-		if(region!=null && !region.isInside(query)) {
-			data.applyMultiplier(getExternalDecay(query));
+	protected final IGeologyData getProtected3DGeologyData(IGeologyData t,Vector3i vec) { 
+		IGeologyData data = getGeologyData(t,vec);
+		if(region!=null) {
+			if(!region.isInside(vec)) {
+				data.applyMultiplier(getPrototypeExternalDecay(vec));
+			}
+			data.applyMultiplier(getControlMapDecay(vec));
 		}
 		return data;
 	}
@@ -76,7 +82,7 @@ public abstract class AbstractPrototype extends AbstractPointModifier {
 		if(region==null) {
 			return 1;
 		}
-		return getExternalDecay(PointModifierFactory.Extract2iVector(vec));
+		return getPrototypeExternalDecay(PointModifierFactory.Extract2iVector(vec));
 	}
 	
 	protected double getPrototypeExternalDecay(Vector2i vec) {
@@ -103,14 +109,14 @@ public abstract class AbstractPrototype extends AbstractPointModifier {
 		if(region==null) {
 			return 1;
 		}
-		return getInternalDecay(PointModifierFactory.Extract2iVector(vec));
+		return getPrototypeInternalDecay(PointModifierFactory.Extract2iVector(vec));
 	}
 
 	protected double getPrototypeInternalDecay(Vector2i vec) {
 		if(region==null) {
 			return 0;
 		}
-		double val = 1 - region.getNormalizedDistanceToEdge(vec)*INTERNAL_DECAY;
+		double val = region.getNormalizedDistanceToEdge(vec)*INTERNAL_DECAY;
 		if(val > 1)
 			return 1;
 		else if(val < ZERO_THRESHOLD)
@@ -128,22 +134,18 @@ public abstract class AbstractPrototype extends AbstractPointModifier {
 	public final boolean equals(Object o) {
 		return region.equals(o);
 	}
-	
-	public RegionPointGenerator getKey() {
-		return region;
-	}
 
 	public final boolean isLeaf() { return true; }
 	
 
 	@Override
-	protected final boolean isVectorInsidePrototype(Vector2i center) {
+	protected final boolean isVectorInsidePrototypeRegion(Vector2i center) {
 		return region.isInside(center);
 	}
 
 
 	@Override
-	protected final boolean isVectorInsidePrototype(Vector3i query) {
+	protected final boolean isVectorInsidePrototypeRegion(Vector3i query) {
 		return region.isInside(query);
 	}
 	

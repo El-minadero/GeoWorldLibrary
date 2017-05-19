@@ -11,12 +11,14 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.RandomInterface;
+import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
 abstract class Shape2D extends Shape {
 
 	private final Vector2i center;
 	protected final Random rand;
 	private final double xAxis;
 	private final double yAxis;
+	private boolean queried;
 	
 	Shape2D(Vector2i center,double theta,RegionTypes type, double xAxis, double yAxis){
 		super(type);
@@ -24,7 +26,9 @@ abstract class Shape2D extends Shape {
 		this.xAxis = xAxis;
 		this.yAxis = yAxis;
 		this.center = center;
-		this.rand = new Random(center.hashCode()^type.ordinal());
+		this.queried = false;
+		this.rand = new Random(HashCodeOperations.createVectorSeed(center));
+		rand.nextDouble();
 	}
 	
 	protected abstract double getDistanceToLocalEdge(Vector2d vec);

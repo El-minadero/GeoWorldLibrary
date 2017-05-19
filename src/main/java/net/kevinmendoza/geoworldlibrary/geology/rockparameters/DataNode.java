@@ -15,6 +15,17 @@ class DataNode implements IGeologyData {
 		}
 	}
 
+	public DataNode(int id2, HashMap<Order, IGeologyData> dataMap2) {
+		id=id2;
+		dataMap = new HashMap<>();
+		for(Order order : Order.values()) {
+			dataMap.put(order, dataMap2.get(order).copy());
+		}
+	}
+
+	public IGeologyData copy() {
+		return new DataNode(id,dataMap);
+	}
 	@Override
 	public void merge(IGeologyData data,double mergeWeight) {
 		if(!data.isEmpty()) {
@@ -57,8 +68,7 @@ class DataNode implements IGeologyData {
 	private void mergeSingleLeaf(AbstractDataLeaf leaf, double mergeWeight) {
 		IGeologyData target = dataMap.get(leaf.getOrder());
 		if(target.isEmpty()) {
-			leaf.applyMultiplier(mergeWeight);
-			dataMap.put(leaf.getOrder(), leaf);
+			dataMap.put(leaf.getOrder(), leaf.copy());
 		}
 		else
 			target.merge(leaf,mergeWeight);
@@ -66,7 +76,7 @@ class DataNode implements IGeologyData {
 	private void mergeSingleLeaf(AbstractDataLeaf leaf) {
 		IGeologyData target = dataMap.get(leaf.getOrder());
 		if(target.isEmpty()) {
-			dataMap.put(leaf.getOrder(), leaf);
+			dataMap.put(leaf.getOrder(), leaf.copy());
 		}
 		else
 			target.merge(leaf);

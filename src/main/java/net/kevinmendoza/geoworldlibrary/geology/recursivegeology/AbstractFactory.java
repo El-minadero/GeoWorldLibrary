@@ -17,4 +17,8 @@ abstract class AbstractFactory {
 	
 	protected final long getSeed() {return SEED;}
 	protected final Random getRandom() { return random;}
+	
+	public int hashCode() {
+		return (int)getSeed();
+	}
 }

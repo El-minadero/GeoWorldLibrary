@@ -18,13 +18,11 @@ package net.kevinmendoza.geoworldlibrary.utilities;
 
 import org.slf4j.Logger;
 
-public class Debug {
+public class Debug implements IDebug {
 
 	protected Logger log;
 	
-	public Debug(Logger logger) {
-		log = logger;
-	}
+	public void setLogger(Logger logger) { log = logger; }
 
 	public void log(String string) {
 		log.info(string);

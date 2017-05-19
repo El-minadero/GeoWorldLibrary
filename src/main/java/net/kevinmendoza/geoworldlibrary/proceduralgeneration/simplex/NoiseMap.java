@@ -18,4 +18,8 @@ public interface NoiseMap {
 	public double getNoise(Vector3d vec);
 	
 	public double getNoise(Vector2d vec);
+	
+	public boolean isPositive(Vector3i vec);
+	
+	public boolean isPositive(Vector2i vec);
 }

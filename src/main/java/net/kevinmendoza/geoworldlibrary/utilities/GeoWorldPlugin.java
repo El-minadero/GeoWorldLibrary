@@ -7,8 +7,6 @@ import ninja.leaping.configurate.ConfigurationNode;
 
 public interface GeoWorldPlugin {
 	
-	public GeoWorldPlugin GetInstance();
-
-	public IGeology getGeologicMap();
+	public IGeology getGeology(long seed);
 
 }

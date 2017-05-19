@@ -51,15 +51,15 @@ public class PointModifierFactory {
 		@Override
 		public Vector2i getOffsetPoint(Vector2i vec) {
 			int xx = (int) maps.get(0).getNoise(vec) + vec.getX();
-			int zz = (int) maps.get(2).getNoise(vec) + vec.getY();
+			int zz = (int) maps.get(2).getNoise(vec.getY(),vec.getX()) + vec.getY();
 			return new Vector2i(xx,zz);
 		}
 		
 		@Override
 		public Vector3i getOffsetPoint(Vector3i vec) {
 			int xx = (int) maps.get(0).getNoise(vec) + vec.getX();
-			int yy = (int) maps.get(1).getNoise(vec) + vec.getY();
-			int zz = (int) maps.get(2).getNoise(vec) + vec.getZ();
+			int yy = (int) maps.get(1).getNoise(vec)*0 + vec.getY();
+			int zz = (int) maps.get(2).getNoise(vec.getZ(),vec.getY(),vec.getX()) + vec.getZ();
 			return new Vector3i(xx,yy,zz);
 		}
 		

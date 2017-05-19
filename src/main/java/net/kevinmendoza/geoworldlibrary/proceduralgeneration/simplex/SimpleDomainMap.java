@@ -5,26 +5,26 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-class SimpleSimplexNoiseMap  extends AbstractMap {
+public class SimpleDomainMap extends AbstractMap {
 
-	private double frequency;
-	private double weight;
-
-	private OpenSimplexNoise simplexNoise;
-
-	SimpleSimplexNoiseMap(double frequency, double weight,Long seed) {
-		this.weight=weight/2;
-		this.frequency = frequency;
-		this.simplexNoise = new OpenSimplexNoise(seed);
+	private NoiseMap map1;
+	private final double cutoff;
+	private final double inv;
+	
+	SimpleDomainMap(NoiseMap map1, double cutoff) {
+		this.map1=map1;
+		this.cutoff=cutoff;
+		this.inv = 1-cutoff;
 	}
 	
-	public double getNoise(double x, double y, double z) {
-		double sNoise = simplexNoise.eval(x / frequency,
-				y/ frequency,z/ frequency);
-		
-		return this.weight*(sNoise +1.0);
+	public double getNoise(double x, double y, double z){
+		double domainMap = map1.getNoise(x, y, z);
+		if (domainMap >=cutoff)
+			return (domainMap - cutoff)/inv;
+		else
+			return 0.0;
 	}
-
+	
 	@Override
 	public double getNoise(double x, double y) {
 		return getNoise(x,0,y);
@@ -49,5 +49,4 @@ class SimpleSimplexNoiseMap  extends AbstractMap {
 	public double getNoise(Vector2d vec) {
 		return getNoise(vec.getX(),0,vec.getY());
 	}
-
 }

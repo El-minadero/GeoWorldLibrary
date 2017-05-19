@@ -7,6 +7,7 @@ import com.flowpowered.math.vector.Vector3i;
 
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionPointGenerator;
+import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
 
 public abstract class AbstractPrototypeFactory extends AbstractFactory {
 
@@ -15,17 +16,27 @@ public abstract class AbstractPrototypeFactory extends AbstractFactory {
 	public abstract Region makeRegion(Vector2i vec);
 
 	protected long createVectorSeed(Vector2i vec) {
-		long s = (vec.getX()*661) + vec.getY();
+		long s = HashCodeOperations.createVectorSeed(vec);
 		return hash(s);
 	}
 
 	protected long createVectorSeed(Vector3i vec) {
-		long s = ((vec.getX()*661) + vec.getY()) + vec.getZ()*331;
+		long s = HashCodeOperations.createVectorSeed(vec);
 		return hash(s);
 	}
 	
 	private long hash(long s) {
 		return s %(1024 + getSeed());
 	}
+	@Override
+	public final boolean equals(Object o) {
+		if (o == this) return true;
+		if (!(o instanceof AbstractPrototypeFactory)) {
+			return false;
+		}
+		AbstractPrototypeFactory user = (AbstractPrototypeFactory) o;
+		return user.hashCode()==user.hashCode();
+	}
+	
 	
 }

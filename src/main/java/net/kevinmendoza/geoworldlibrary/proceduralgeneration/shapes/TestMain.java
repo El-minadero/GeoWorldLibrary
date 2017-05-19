@@ -24,6 +24,16 @@ public class TestMain {
 					img.setRGB(x,z,100);
 			}
 		}
+		for(int i =0; i<5; i++) {
+			Vector2i v2 = region.getRandomInternalPoint();
+			Region region2 = RegionFactory.MakeRegionType(RegionTypes.ELLIPSE, v2, 20.0, 30.0, region.getDouble()*Math.PI*2);
+			for(int x=0;x<500;x++) {
+				for(int z=0;z<500;z++) {
+					if(region2.isInside(new Vector3i(x,0,z)))
+						img.setRGB(x,z,200);
+				}
+			}
+		}
 		File outputfile = new File("RectangleTest.png");
 		try {
 			ImageIO.write(img, "png", outputfile);

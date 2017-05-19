@@ -5,7 +5,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-final class ValueOffsetMap implements NoiseMap {
+final class ValueOffsetMap extends AbstractMap {
 
 	private final NoiseMap map;
 	private final double offset;

@@ -24,7 +24,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-class MultiFrequencySimplexNoise implements NoiseMap {
+class MultiFrequencySimplexNoise extends AbstractMap {
 
 	private double weightSum;
 	

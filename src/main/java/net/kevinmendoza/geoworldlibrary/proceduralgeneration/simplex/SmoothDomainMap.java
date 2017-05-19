@@ -5,7 +5,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-class SmoothDomainMap implements NoiseMap {
+class SmoothDomainMap extends AbstractMap {
 
 	private NoiseMap map1;
 	private NoiseMap map2;

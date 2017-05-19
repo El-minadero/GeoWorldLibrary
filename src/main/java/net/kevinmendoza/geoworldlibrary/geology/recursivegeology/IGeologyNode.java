@@ -9,9 +9,6 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionPointG
 
 public interface IGeologyNode extends IGeology {
 
-	public Vector2i modifyVector(Vector2i vec);
-	public Vector3i modifyVector(Vector3i vec);
-	
 	public Vector2i getRandomInternalPoint();
 	
 	public double getExternalDecay(Vector2i vec);
@@ -22,9 +19,6 @@ public interface IGeologyNode extends IGeology {
 	
 	public boolean isVectorInRegion(Vector2i center);
 	public boolean isVectorInRegion(Vector3i query);
-	
-	public boolean isUnmodifiedVectorInRegion(Vector2i center);
-	public boolean isUnmodifiedVectorInRegion(Vector3i query);
 	
 	public String getName();
 	boolean isLeaf();

@@ -12,6 +12,8 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
+import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
+
 abstract class Shape3D extends Shape {
 
 	private final Vector3i center;
@@ -23,7 +25,8 @@ abstract class Shape3D extends Shape {
 	
 	Shape3D(Vector3i center,RegionTypes type,double xAxis,double yAxis, double zAxis){
 		super(type,center.getY());
-		this.rand = new Random(center.hashCode()^type.ordinal());
+		this.rand = new Random(HashCodeOperations.createVectorSeed(center));
+		rand.nextDouble();
 		this.setRotation(createRotationMatrix());
 		this.xAxis = xAxis;
 		this.yAxis = yAxis;

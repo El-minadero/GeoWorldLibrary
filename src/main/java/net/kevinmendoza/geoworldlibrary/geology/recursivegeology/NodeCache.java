@@ -1,22 +1,17 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
 import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Comparison;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionPointGenerator;
 
 class NodeCache extends Comparison {
 
 	private HashSet<IGeologyNode> geoMap;
 	private AbstractPrototypeFactory factory;
+	private Node node;
 	
 	/**
 	 * 
@@ -26,7 +21,8 @@ class NodeCache extends Comparison {
 	 */
 	 NodeCache(AbstractPrototypeFactory factory, int subObjects,Node node) {
 		this.factory = factory;
-		geoMap = new HashSet<>();
+		this.node = node;
+		this.geoMap = new HashSet<>();
 		populateSubRegions(subObjects,node);
 	}
 
@@ -49,7 +45,7 @@ class NodeCache extends Comparison {
 		}
 	}
 	
-	 HashSet<IGeologyNode> getOverlappingObjects(Vector2i check) {
+	 private HashSet<IGeologyNode> getOverlapObjects(Vector2i check) {
 		buildObjects(check);
 		HashSet<IGeologyNode> returnSet = new HashSet<>();
 		for(IGeologyNode reg : geoMap) {
@@ -60,9 +56,8 @@ class NodeCache extends Comparison {
 		return returnSet;
 	}
 
-	 HashSet<IGeologyNode> getDistantObjects(
-			Vector2i center) {
-		 HashSet<IGeologyNode> returnSet = new HashSet<>();
+	 private HashSet<IGeologyNode> getDistObjects(Vector2i center) {
+		HashSet<IGeologyNode> returnSet = new HashSet<>();
 		for(IGeologyNode reg : geoMap) {
 			if(!reg.isVectorInRegion(center)){
 				if(!isZero(reg.getExternalDecay(center)))
@@ -72,13 +67,20 @@ class NodeCache extends Comparison {
 		return returnSet;
 	}
 
-	 HashSet<IGeologyNode> getOverlappingObjects(Vector3i query) {
-		return getOverlappingObjects(new Vector2i(query.getX(),query.getZ()));
+	 HashSet<IGeologyNode> getOverlappingObjects(Vector2i vec) {
+		return getOverlapObjects(vec);
+	 }
+
+	 HashSet<IGeologyNode> getDistantObjects(Vector2i vec) {
+		return getDistObjects(vec);
+	 }
+
+	 HashSet<IGeologyNode> getOverlappingObjects(Vector3i vec) {
+		return getOverlapObjects(new Vector2i(vec.getX(),vec.getZ()));
 	}
 
-	 HashSet<IGeologyNode> getDistantObjects(
-			Vector3i query) {
-		return getDistantObjects(new Vector2i(query.getX(),query.getZ()));
+	 HashSet<IGeologyNode> getDistantObjects(Vector3i vec) {
+		return getDistObjects(new Vector2i(vec.getX(),vec.getZ()));
 	}
 
 	public void buildAll() {

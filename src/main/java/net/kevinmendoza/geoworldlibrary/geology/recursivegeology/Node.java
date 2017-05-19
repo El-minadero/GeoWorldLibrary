@@ -20,7 +20,7 @@ class Node extends AbstractNode {
 
 	protected final void prime(GenerationData metaData) {
 		Vector2i newVec = metaData.get2DCoordinate();
-		if(isUnmodifiedVectorInRegion(newVec)) {
+		if(isVectorInRegion(newVec)) {
 			setInternalList(map.getOverlappingObjects(newVec));
 			setExternalList(map.getDistantObjects(newVec));
 		}
@@ -31,7 +31,7 @@ class Node extends AbstractNode {
 			Vector2i query,HashSet<IGeologyNode> tempTotal) {
 		IGeologyData dataNode = DataFactory.GetGeologyDataNode(testData.getID());
 		IGeologyData prototypeData = getPrototype2DData(testData,  query);
-		if(isUnmodifiedVectorInRegion(query)) {
+		if(isVectorInRegion(query)) {
 			dataNode.merge(prototypeData);
 			mergeData(testData,dataNode, query,tempTotal);
 			dataNode.merge(prototypeData,1-getInternalDecay( query));
@@ -47,7 +47,7 @@ class Node extends AbstractNode {
 			Vector3i query, HashSet<IGeologyNode> tempTotal) {
 		IGeologyData dataNode = DataFactory.GetGeologyDataNode(testData.getID());
 		IGeologyData prototypeData = getPrototype3DData(testData, query);
-		if(isUnmodifiedVectorInRegion(query)) {
+		if(isVectorInRegion(query)) {
 			dataNode.merge(prototypeData);
 			mergeData(testData,dataNode,query,tempTotal);
 			dataNode.merge(prototypeData,1-getInternalDecay(query));

@@ -16,8 +16,7 @@ class MapCache extends Comparison {
 	private AbstractPrototypeFactory factory;
 	private boolean debugMode;
 	
-	public MapCache(AbstractPrototypeFactory factory, boolean b) {
-		debugMode = b;
+	public MapCache(AbstractPrototypeFactory factory) {
 		this.factory = factory;
 		geoMap = new HashMap<>();
 	}

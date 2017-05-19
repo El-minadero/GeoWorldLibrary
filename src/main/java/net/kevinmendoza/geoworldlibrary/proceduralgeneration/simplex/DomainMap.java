@@ -5,7 +5,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-class DomainMap implements NoiseMap {
+class DomainMap extends AbstractMap {
 
 
 	private NoiseMap map1;

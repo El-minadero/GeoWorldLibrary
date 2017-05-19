@@ -5,7 +5,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-class PrototypeMap implements NoiseMap{
+class PrototypeMap  extends AbstractMap {
 
 	@Override
 	public double getNoise(double x, double y) {

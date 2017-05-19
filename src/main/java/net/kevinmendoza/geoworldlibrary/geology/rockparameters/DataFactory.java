@@ -22,7 +22,9 @@ public class DataFactory {
 		public boolean isEmpty() { return true; }
 		public boolean isLeaf() { return true;  }
 		public int getID() { return 0;}
-
+		public IGeologyData copy() {
+			return GetEmptyData();
+		}
 		public IGeologyData getOrderData(Order order) { return GetEmptyData(); }
 		
 	}

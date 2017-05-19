@@ -37,54 +37,25 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 		total 		   = new HashSet<>();
 	}
 	
-	@Override
+	public int getSubOrder() { return prototype.getSubOrder(); }
+	public Order getOrder() { return prototype.getOrder(); }
+
+	public final String getName() { return prototype.getName(); }
+	public final boolean isLeaf() { return false; }
+	
 	public final void primeGeneration(GenerationData metaData) {
 		clearChildren();
-		Vector2i vec = metaData.get2DCoordinate();
-		Vector2i mod = prototype.modifyVector(vec);
 		GenerationData data2 = metaData.getCopy();
-		data2.set2DCoordinate(mod);
 		prime(data2);
 		primeGenerationList(data2);
 	}
 	
-	protected final IGeologyData getPrototype2DData(IGeologyData data, Vector2i vec) 
-	{ return prototype.get2DGeologyData(data, vec); }
-	protected final IGeologyData getPrototype3DData(IGeologyData data, Vector3i vec)
-	{ return prototype.get3DGeologyData(data, vec); }
-	
-	public final double getExternalDecay(Vector2i vec) { return prototype.getExternalDecay(vec); }
-	public final double getExternalDecay(Vector3i vec) { return prototype.getExternalDecay(vec); }
-	
-	public final double getInternalDecay(Vector2i vec) { return prototype.getExternalDecay(vec); }
-	public final double getInternalDecay(Vector3i vec) { return prototype.getExternalDecay(vec); }
-	
-	public final boolean isVectorInRegion(Vector2i vec)  { return prototype.isVectorInRegion(vec); }
-	public final boolean isVectorInRegion(Vector3i vec)  { return prototype.isVectorInRegion(vec); }
-	
-	public boolean isUnmodifiedVectorInRegion(Vector2i vec) { return prototype.isUnmodifiedVectorInRegion(vec); }
-	public boolean isUnmodifiedVectorInRegion(Vector3i vec) { return prototype.isUnmodifiedVectorInRegion(vec); }
-	
-	public final  Vector2i modifyVector(Vector2i vec)  { return prototype.modifyVector(vec); }
-	public final  Vector3i modifyVector(Vector3i vec)  { return prototype.modifyVector(vec); }
-
-	public Vector2i getRandomInternalPoint() { return prototype.getRandomInternalPoint(); }
-
-
-	@Override
-	public IGeologyData get2DGeologyData(IGeologyData testDat, Vector2i query) {
-		return getProtected2DGeologyData(testDat, query);
-	}
-
-	public IGeologyData get3DGeologyData(IGeologyData testDat, Vector3i query) {
-		return getProtected3DGeologyData(testDat, query);
-	}
-	
-	protected void clearChildren() {
+	private void clearChildren() {
 		internal.clear();
 		external.clear();
 		total.clear();
 	}
+	
 	private final void primeGenerationList(GenerationData data) {
 		prototype.primeGeneration(data);
 		if(!internal.isEmpty() )
@@ -108,14 +79,32 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 		external.addAll(i);
 	}
 
-	protected IGeologyData getProtected2DGeologyData(IGeologyData testDat,Vector2i vec) {
+	protected final IGeologyData getPrototype3DData(IGeologyData testData,Vector3i query) {
+		return prototype.get3DGeologyData(testData, query);
+	}
+	protected final IGeologyData getPrototype2DData(IGeologyData testData,Vector2i query) {
+		return prototype.get2DGeologyData(testData, query);
+	}
+	public final double getExternalDecay(Vector2i vec) { return prototype.getExternalDecay(vec); }
+	public final double getExternalDecay(Vector3i vec) { return prototype.getExternalDecay(vec); }
+	
+	public final double getInternalDecay(Vector2i vec) { return prototype.getInternalDecay(vec); }
+	public final double getInternalDecay(Vector3i vec) { return prototype.getInternalDecay(vec); }
+	
+	public final boolean isVectorInRegion(Vector2i vec)  { return prototype.isVectorInRegion(vec); }
+	public final boolean isVectorInRegion(Vector3i vec)  { return prototype.isVectorInRegion(vec); }
+
+	public Vector2i getRandomInternalPoint() { return prototype.getRandomInternalPoint(); }
+
+	@Override
+	public IGeologyData get2DGeologyData(IGeologyData testDat, Vector2i vec) {
 		if(total.isEmpty())
 			return prototype.get2DGeologyData(testDat,vec);
 		HashSet<IGeologyNode> tempTotal = (HashSet<IGeologyNode>) total.clone();
 		return getCombined2DConditions(testDat,vec,tempTotal);
 	}
 
-	protected IGeologyData getProtected3DGeologyData(IGeologyData testDat,Vector3i vec){
+	public IGeologyData get3DGeologyData(IGeologyData testDat, Vector3i vec) {
 		if(total.isEmpty())
 			return prototype.get3DGeologyData(testDat,vec);
 		HashSet<IGeologyNode> tempTotal = (HashSet<IGeologyNode>) total.clone();
@@ -154,14 +143,4 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 	public final int hashCode(){
 		return prototype.hashCode();
 	}
-
-	protected Vector2i getBlankRandomPoint() {
-		return prototype.getRandomInternalPoint();
-	}
-
-	public int getSubOrder() { return prototype.getSubOrder(); }
-	public Order getOrder() { return prototype.getOrder(); }
-
-	public final String getName() { return prototype.getName(); }
-	public final boolean isLeaf() { return false; }
 }

@@ -18,13 +18,16 @@ abstract class Shape implements Region,RandomInterface {
 	private final RegionTypes type;
 	private Rotation rotation;
 	private final double yVal;
+	private boolean queried;
 	
 	Shape(RegionTypes type,double yVal){
+		queried = false;
 		this.type = type;
 		this.rotation =initEmptyRotation();
 		this.yVal = yVal;
 	}
 	Shape(RegionTypes type){
+		queried = false;
 		this.type = type;
 		this.rotation =initEmptyRotation();
 		this.yVal = 0;
@@ -35,6 +38,13 @@ abstract class Shape implements Region,RandomInterface {
 	}
 	protected void setRotation(Rotation rot) {
 		this.rotation = rot;
+	}
+	private final boolean getQueried() {
+		if(!queried) {
+			queried = true;
+			return true;
+		}
+		return false;
 	}
 	public abstract int getInt(int i);
 	public abstract double getDouble();

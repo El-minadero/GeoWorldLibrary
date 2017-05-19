@@ -1,17 +1,18 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMap;
 
 public final class NodeBuilder implements INodeBuilder {
 	
 	private IGeologyNode prototype;
 	private int number;
 	private AbstractPrototypeFactory factory;
-	private PointModifier modifier;
+	private NoiseMap controlMap;
 
 	public NodeBuilder setPrototype(AbstractPrototype prototype) {
 		this.prototype = prototype;
-		this.modifier = prototype.getPointModifier();
+		this.controlMap = prototype.getControlMap();
 		return this;
 	}
 
@@ -30,7 +31,5 @@ public final class NodeBuilder implements INodeBuilder {
 	IGeologyNode getPrototype() { return prototype;}
 	AbstractPrototypeFactory getFactory()     { return factory;  }
 	int getSubObjectNumber()		{ return number;   }
-
-	public PointModifier getPointModifierMap() { return modifier; }
 
 }
