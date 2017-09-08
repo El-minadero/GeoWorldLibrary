@@ -7,41 +7,40 @@ import java.util.Random;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.DataFactory;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GenerationData;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.IGeologyData;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.PointGeneratorFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.PointGeneratorInterface;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.DefaultDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.EmptyDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.GenerationData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.Surface;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.IPointGenerator;
 
  
 final class Map extends AbstractNode {
 
-	private long SEED;
-	private final double SPACING;
-	private final double FREQUENCY;
-	private boolean debugMode;
-	private PointGeneratorInterface pointQuery;
+	private final MapData data;
+	private IPointGenerator pointQuery;
 	private MapCache regionCache;
 	private AbstractPrototypeFactory factory;
-	private AbstractPrototype prototype;
 	
 	Map(IGeologyMapBuilder builder) {
-		super(builder.getPrototype());
-		prototype 		= builder.getPrototype();
-		factory			= builder.getFactory();
-		SPACING   		= builder.getSpacing();
-		FREQUENCY       = builder.getFrequency();
-		SEED	  		= builder.getSeed();
-		debugMode 		= builder.debugMode();
+		super();
+		data = new MapData(builder);
+		factory			= builder.getSubObjectFactory();
 		regionCache 	= new MapCache(factory);
-		pointQuery 		= PointGeneratorFactory.makePointGenerator(SEED,(int)SPACING);
+		pointQuery 		= PointGeneratorFactory.makePointGenerator(data.getSeed(),data.getSpacing());
+	}
+	@Override
+	protected int additionalInfoRGBDebug(Vector3i query){
+		return pointQuery.getRGBDebugVal(query);
 	}
 	public final void setSeed(long seed) {
-		this.SEED = seed;
-		pointQuery = PointGeneratorFactory.makePointGenerator(seed,(int)SPACING);
+		data.setSeed(seed);
+		pointQuery = PointGeneratorFactory.makePointGenerator(seed,data.getSpacing());
 	}
 
-	protected final void prime(GenerationData data) {
+	protected final void cacheNearbyNodes(GenerationData data) {
 		Vector2i center = data.get2DCoordinate();
 		List<Vector2i> pointsToBuild = regionCache.getRegionCentersToBuild(
 				pointQuery.getFlooredCenterNeighborhood(center));
@@ -61,34 +60,33 @@ final class Map extends AbstractNode {
 	}
 
 	public boolean shouldBuildRegion(Vector2i vec) { 
-		Random rand = new Random(vec.hashCode());
-		rand.nextDouble();
-		return (rand.nextDouble()<=FREQUENCY);
+		return data.shouldBuild(vec);
 	}
 	private IGeologyNode buildGeologicRegionObject(Vector2i vec) {
 		return factory.makePrototype(vec);
 	}
 
 	@Override
-	protected IGeologyData getCombined2DConditions(IGeologyData testData, Vector2i query
+	protected ISingularGeologyData getCombined2DConditions(ISingularGeologyData testData, Vector2i query
 			,HashSet<IGeologyNode> tempTotal) {
-		IGeologyData dataNode = DataFactory.GetGeologyDataNode(testData.getID());
-		dataNode.merge(getPrototype2DData(testData, query));
-		mergeData(testData,dataNode,query,tempTotal);
-		return dataNode;
+		ISingularGeologyData data = DefaultDataFactory.getEmptyDataObject(testData.getID());
+		for(IGeologyNode obj : tempTotal) {
+				data.merge(obj.get2DGeologyData(testData,query));
+		}
+		return data;
 	}
 
 	@Override
-	protected IGeologyData getCombined3DConditions(IGeologyData testData, Vector3i query
+	protected ISingularGeologyData getCombined3DConditions(ISingularGeologyData testData, Vector3i query
 			,HashSet<IGeologyNode> tempTotal) {
-		IGeologyData dataNode = DataFactory.GetGeologyDataNode(testData.getID());
-		dataNode.merge(getPrototype3DData(testData, query));
-		mergeData(testData,dataNode,query,tempTotal);
-		return dataNode;
+		ISingularGeologyData data = DefaultDataFactory.getEmptyDataObject(testData.getID());
+		for(IGeologyNode obj : tempTotal) {
+				data.merge(obj.get3DGeologyData(testData,query));
+		}
+		return data;
 	}
-	@Override
-	public void debug() {
 
-	}
+	public AbstractPrototypeFactory getFactory() { return null; }
+	public void setFactory(AbstractPrototypeFactory factory) {}
 	
 }

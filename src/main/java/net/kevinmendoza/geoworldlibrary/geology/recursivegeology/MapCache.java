@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Comparison;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.IGeologyNode;
 import com.flowpowered.math.vector.Vector2i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Comparison;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
 
 class MapCache extends Comparison {

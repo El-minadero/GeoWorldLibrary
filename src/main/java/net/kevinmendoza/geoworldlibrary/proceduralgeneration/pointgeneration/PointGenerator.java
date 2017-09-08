@@ -1,11 +1,13 @@
 package net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 import com.flowpowered.math.vector.Vector2i;
+import com.flowpowered.math.vector.Vector3i;
 
-public class PointGenerator implements PointGeneratorInterface {
+class PointGenerator implements IPointGenerator {
 
 	private static long PRIME = 7;
 	private final double SPACING;
@@ -68,5 +70,16 @@ public class PointGenerator implements PointGeneratorInterface {
 		public PointGenerator build() {
 			return new PointGenerator(this);
 		}
+	}
+
+	@Override
+	public int getRGBDebugVal(Vector3i query) {
+		int rgb=0;
+		int x = (int) (query.getX()%SPACING);
+		int y = (int) (query.getZ()%SPACING);
+		if(x==0 || y==0) {
+			rgb = Color.WHITE.getRGB();
+		}
+		return rgb;
 	}
 }

@@ -3,8 +3,9 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Comparison;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.IGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Comparison;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMap;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMapFactory;
 
@@ -47,18 +48,18 @@ abstract class AbstractControlRegion extends Comparison implements IGeologyNode 
 	public final boolean isVectorInRegion(Vector2i vec) { return isVectorInsidePrototypeRegion(vec); }
 	public final boolean isVectorInRegion(Vector3i vec) { return isVectorInsidePrototypeRegion(vec); }
 	
-	public final IGeologyData get2DGeologyData(IGeologyData t,Vector2i query) { 
+	public final ISingularGeologyData get2DGeologyData(ISingularGeologyData t,Vector2i query) { 
 		return getProtected2DGeologyData(t,query);
 	}
 	
-	public final IGeologyData get3DGeologyData(IGeologyData t,Vector3i query) { 
+	public final ISingularGeologyData get3DGeologyData(ISingularGeologyData t,Vector3i query) { 
 		return getProtected3DGeologyData(t,query);
 	}
 	
 	protected abstract Vector2i getBlankRandomPoint();
 	
-	protected abstract IGeologyData getProtected2DGeologyData(IGeologyData t,Vector2i query);
-	protected abstract IGeologyData getProtected3DGeologyData(IGeologyData t,Vector3i query);
+	protected abstract ISingularGeologyData getProtected2DGeologyData(ISingularGeologyData t,Vector2i query);
+	protected abstract ISingularGeologyData getProtected3DGeologyData(ISingularGeologyData t,Vector3i query);
 
 	protected abstract double getPrototypeExternalDecay(Vector2i vec);
 	protected abstract double getPrototypeExternalDecay(Vector3i vec);

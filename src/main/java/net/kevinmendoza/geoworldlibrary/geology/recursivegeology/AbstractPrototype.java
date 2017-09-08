@@ -1,20 +1,14 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
-import java.util.Collection;
+import java.awt.Color;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Comparison;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GenerationData;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.IGeologyData;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Order;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifierFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionPointGenerator;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMap;
 
 public abstract class AbstractPrototype extends AbstractControlRegion {
 	
@@ -24,12 +18,12 @@ public abstract class AbstractPrototype extends AbstractControlRegion {
 	private final int SUB_ORDER;
 	private final Region region;
 	private final Order order;
-	private final NoiseMap controlMap;
+	private final AbstractPrototypeFactory factory;
 
 	public AbstractPrototype(IPrototypeBuilder builder) {
 		super(builder.getControlMap());
-		controlMap = builder.getControlMap();
 		SUB_ORDER = TOTAL;
+		factory = builder.getFactory();
 		TOTAL++;
 		INTERNAL_DECAY= builder.getInternalDecayConstant();
 		EXTERNAL_DECAY= builder.getExternalDecayConstant();
@@ -42,38 +36,56 @@ public abstract class AbstractPrototype extends AbstractControlRegion {
 	
 	public AbstractPrototype(Order order) {
 		super();
+		factory = new NullFactory();
 		SUB_ORDER = TOTAL;
 		TOTAL++;
 		INTERNAL_DECAY= 1;
 		EXTERNAL_DECAY= 1;
 		this.order    = order;
 		region 		  = null;
-		controlMap = null;
 	}
 	
-	public NoiseMap getControlMap() { return controlMap; }
-	
-	protected abstract IGeologyData getGeologyData(IGeologyData testData, Vector2i query);
-	protected abstract IGeologyData getGeologyData(IGeologyData testData, Vector3i query);
 
-	protected final IGeologyData getProtected2DGeologyData(IGeologyData t,Vector2i vec) { 
-		IGeologyData data = getGeologyData(t,vec);
-		if(region!=null) {
-			if(!region.isInside(vec)) {
-				data.applyMultiplier(getPrototypeExternalDecay(vec));
+	@Override
+	public final AbstractPrototypeFactory getFactory() { return factory; }
+	@Override
+	public final int getRGBDebugAtCoordinates(Vector3i query) {
+		int rgb =0;
+		if(region!=null && region.isInside(query)) {
+			rgb+=Color.PINK.getRGB();
+		}
+		rgb+=overrideRGBInfo(query);
+		return rgb;
+	}
+
+	protected int overrideRGBInfo(Vector3i query) {
+		return 0;
+	}
+	protected abstract ISingularGeologyData getGeologyData(ISingularGeologyData testData, Vector2i query);
+	protected abstract ISingularGeologyData getGeologyData(ISingularGeologyData testData, Vector3i query);
+
+	protected final ISingularGeologyData getProtected2DGeologyData(ISingularGeologyData t,Vector2i vec) { 
+		ISingularGeologyData data = getGeologyData(t,vec);
+		if(data!=null) {
+			if(region!=null) {
+				if(!region.isInside(vec)) {
+					data.applyMultiplier(getPrototypeExternalDecay(vec));
+				}
+				data.applyMultiplier(getControlMapDecay(vec));
 			}
-			data.applyMultiplier(getControlMapDecay(vec));
 		}
 		return data;
 	}
 	
-	protected final IGeologyData getProtected3DGeologyData(IGeologyData t,Vector3i vec) { 
-		IGeologyData data = getGeologyData(t,vec);
-		if(region!=null) {
-			if(!region.isInside(vec)) {
-				data.applyMultiplier(getPrototypeExternalDecay(vec));
+	protected final ISingularGeologyData getProtected3DGeologyData(ISingularGeologyData t,Vector3i vec) { 
+		ISingularGeologyData data = getGeologyData(t,vec);
+		if(data!=null) {
+			if(region!=null) {
+				if(!region.isInside(vec)) {
+					data.applyMultiplier(getPrototypeExternalDecay(vec));
+				}
+				data.applyMultiplier(getControlMapDecay(vec));
 			}
-			data.applyMultiplier(getControlMapDecay(vec));
 		}
 		return data;
 	}
@@ -156,7 +168,7 @@ public abstract class AbstractPrototype extends AbstractControlRegion {
 	
 	protected Vector2i getBlankRandomPoint() {
 		if(region!=null) {
-			return region.getRandomInternalPoint();
+			return region.getRandomInternalPoint2i();
 		}
 		return new Vector2i(0,0);
 	}

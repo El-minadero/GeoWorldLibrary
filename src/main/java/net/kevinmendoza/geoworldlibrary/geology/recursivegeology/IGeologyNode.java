@@ -3,9 +3,11 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Order;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractAlteration;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractRock;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionPointGenerator;
 
 public interface IGeologyNode extends IGeology {
 
@@ -22,10 +24,12 @@ public interface IGeologyNode extends IGeology {
 	
 	public String getName();
 	boolean isLeaf();
+	AbstractPrototypeFactory getFactory();
 	public int getSubOrder();
 	public Order getOrder();
 	
-	public void debug();
 	public boolean equals(Object o);
 	public int hashCode();
+	
+	public ISingularGeologyData getStartingData(ISingularGeologyData dataType);
 }

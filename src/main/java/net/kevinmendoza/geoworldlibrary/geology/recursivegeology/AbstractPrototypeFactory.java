@@ -6,7 +6,6 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionPointGenerator;
 import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
 
 public abstract class AbstractPrototypeFactory extends AbstractFactory {

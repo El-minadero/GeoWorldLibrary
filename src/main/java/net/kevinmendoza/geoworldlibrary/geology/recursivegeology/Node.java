@@ -4,21 +4,25 @@ import java.util.HashSet;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.DataFactory;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GenerationData;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.IGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.DefaultDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.EmptyDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.GenerationData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.Surface;
 
 class Node extends AbstractNode {
 
 	private final NodeCache map;
+	private AbstractPrototypeFactory factory;
 
-	Node(NodeBuilder builder) {
+	Node(INodeBuilder builder) {
 		super(builder);
-		map = new NodeCache(builder.getFactory(),builder.getSubObjectNumber(),this);
+		map = new NodeCache(builder,this);
 	}
 
 
-	protected final void prime(GenerationData metaData) {
+	protected final void cacheNearbyNodes(GenerationData metaData) {
 		Vector2i newVec = metaData.get2DCoordinate();
 		if(isVectorInRegion(newVec)) {
 			setInternalList(map.getOverlappingObjects(newVec));
@@ -27,10 +31,10 @@ class Node extends AbstractNode {
 	}
 	
 	@Override
-	protected IGeologyData getCombined2DConditions(IGeologyData testData,
+	protected ISingularGeologyData getCombined2DConditions(ISingularGeologyData testData,
 			Vector2i query,HashSet<IGeologyNode> tempTotal) {
-		IGeologyData dataNode = DataFactory.GetGeologyDataNode(testData.getID());
-		IGeologyData prototypeData = getPrototype2DData(testData,  query);
+		ISingularGeologyData dataNode = DefaultDataFactory.getEmptyDataObject(testData.getID());
+		ISingularGeologyData prototypeData = getPrototype2DData(testData,  query);
 		if(isVectorInRegion(query)) {
 			dataNode.merge(prototypeData);
 			mergeData(testData,dataNode, query,tempTotal);
@@ -43,10 +47,10 @@ class Node extends AbstractNode {
 	}
 
 	@Override
-	protected IGeologyData getCombined3DConditions(IGeologyData testData,
+	protected ISingularGeologyData getCombined3DConditions(ISingularGeologyData testData,
 			Vector3i query, HashSet<IGeologyNode> tempTotal) {
-		IGeologyData dataNode = DataFactory.GetGeologyDataNode(testData.getID());
-		IGeologyData prototypeData = getPrototype3DData(testData, query);
+		ISingularGeologyData dataNode = DefaultDataFactory.getEmptyDataObject(testData.getID());
+		ISingularGeologyData prototypeData = getPrototype3DData(testData, query);
 		if(isVectorInRegion(query)) {
 			dataNode.merge(prototypeData);
 			mergeData(testData,dataNode,query,tempTotal);
@@ -58,11 +62,9 @@ class Node extends AbstractNode {
 		return dataNode;
 	}
 
-
 	@Override
-	public void debug() {
-		map.buildAll();
-	}
+	public AbstractPrototypeFactory getFactory() { return factory; }
+
 
 }
 

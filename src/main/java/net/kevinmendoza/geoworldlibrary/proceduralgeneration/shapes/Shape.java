@@ -12,129 +12,82 @@ import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.RandomInterface;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
  
-abstract class Shape implements Region,RandomInterface {
-	protected final int PRIME = 41;
-	private final RegionTypes type;
-	private Rotation rotation;
-	private final double yVal;
-	private boolean queried;
+class Shape implements Region,RandomInterface {
 	
-	Shape(RegionTypes type,double yVal){
-		queried = false;
-		this.type = type;
-		this.rotation =initEmptyRotation();
-		this.yVal = yVal;
-	}
-	Shape(RegionTypes type){
-		queried = false;
-		this.type = type;
-		this.rotation =initEmptyRotation();
-		this.yVal = 0;
-	}
+	private final BoundingModel model;
+	private final IRelativePointModifier pointModifier;
+	private final Random random;
 	
-	private Rotation initEmptyRotation() {
-		return new Rotation(RotationOrder.YXZ,RotationConvention.FRAME_TRANSFORM,0,0,0);
+	Shape(BoundingModel model, IRelativePointModifier pointModifier, Random random){
+		this.model = model;
+		this.random = random;
+		this.pointModifier = pointModifier;
 	}
-	protected void setRotation(Rotation rot) {
-		this.rotation = rot;
+
+	public Vector2i getRandomInternalPoint2i() {
+		Vector2i modelPoint = model.getRandom2iPoint();
+		return pointModifier.getGlobalPoint(modelPoint);
 	}
-	private final boolean getQueried() {
-		if(!queried) {
-			queried = true;
-			return true;
+	public Vector3i getRandomInternalPoint3i() {
+		Vector3i modelPoint = model.getRandom3iPoint();
+		return pointModifier.getGlobalPoint(modelPoint);
+	}
+
+	public boolean isInside(Vector2i vec) {
+		Vector2i localPoint = pointModifier.getLocalPoint(vec);
+		return model.isInside(localPoint);
+	}
+	public boolean isInside(Vector3i vec) {
+		Vector3i localPoint = pointModifier.getLocalPoint(vec);
+		return model.isInside(localPoint);
+	}
+
+	public int getInt(int i) { return random.nextInt(i); }
+	public double getDouble() { return random.nextDouble(); }
+
+	@Override
+	public double getNormalizedDistanceToEdge(Vector2i vec) {
+		Vector2i localPoint = pointModifier.getLocalPoint(vec);
+		return model.getNormalizedDistanceToEdge(localPoint);
+	}
+
+	@Override
+	public double getNormalizedDistanceToEdge(Vector3i vec) {
+		Vector3i localPoint = pointModifier.getLocalPoint(vec);
+		return model.getNormalizedDistanceToEdge(localPoint);
+	}
+
+	@Override
+	public boolean isOnEdge(Vector3i vec) {
+		Vector3i localPoint = pointModifier.getLocalPoint(vec);
+		return model.isOnEdge(localPoint);
+	}
+
+	@Override
+	public boolean isOnEdge(Vector2i vec) {
+		Vector2i localPoint = pointModifier.getLocalPoint(vec);
+		return model.isOnEdge(localPoint);
+	}
+
+	public Vector2i getCenter2i() { return pointModifier.getGlobalCenter2i(); }
+	public Vector3i getCenter3i() { return pointModifier.getGlobalCenter3i(); }
+
+	public boolean equals(Object o) {
+		boolean b = false;
+		if(o.getClass().equals(this.getClass())) {
+			Shape otherShape = (Shape)o;
+			if(otherShape.model.equals(this.model) &&
+					otherShape.pointModifier.equals(this.pointModifier)) {
+				b = true;
+			}
 		}
-		return false;
+		return b;
 	}
-	public abstract int getInt(int i);
-	public abstract double getDouble();
-	
-	protected abstract boolean isInBoundingBox(Vector2d vec);
-	protected abstract boolean isInBoundingBox(Vector3d vec);
-
-	protected abstract Vector2i createOffsetPoint(Vector2d vec);
-	protected abstract Vector2d getRandLocalPoint();
-	
-	protected abstract boolean isLocallyInside(Vector3d vec);
-	protected abstract boolean isLocallyInside(Vector2d vec);
-	
-	protected abstract Vector2d getRelativeCoordinates(Vector2d vec);
-	protected abstract Vector3d getRelativeCoordinates(Vector3d vec);
-	
-	protected abstract double getDistanceToLocalEdge(Vector3d vec);
-	protected abstract double getDistanceToLocalEdge(Vector2d vec);
-
-	public abstract int hashCode();
-	public abstract String toString();
-	
-	protected final Vector2d getRotatedCoordinates(Vector2d vec) {
-		double[] tempVec = { vec.getX(),yVal,vec.getY() };
-		rotation.applyTo(tempVec, tempVec);
-		return new Vector2d(tempVec[0],tempVec[2]);
-	}
-	protected final Vector3d getRotatedCoordinates(Vector3d vec) {
-		double[] tempVec = { vec.getX(),vec.getY(),vec.getZ() };
-		rotation.applyTo(tempVec, tempVec);
-		return new Vector3d(tempVec[0],tempVec[1],tempVec[2]);
-	}
-	
-	protected final Vector2d getReverseRotatedCoordinates(Vector2d vec) {
-		double[] tempVec = { vec.getX(),yVal,vec.getY() };
-		rotation.applyInverseTo(tempVec, tempVec);
-		return new Vector2d(tempVec[0],tempVec[2]);
-	}
-	protected final Vector3d getReverseRotatedCoordinates(Vector3d vec) {
-		double[] tempVec = { vec.getX(),vec.getY(),vec.getZ() };
-		rotation.applyInverseTo(tempVec, tempVec);
-		return new Vector3d(tempVec[0],tempVec[1],tempVec[2]);
-	}
-
-	public final RegionTypes getType() { return type; }
-	protected final int getPrime() { return PRIME; }
-	
-	public final  boolean isInside(Vector2i vec) {
-		Vector2d relative = getRelativeCoordinates(vec.toDouble());
-		Vector2d rotated  = getRotatedCoordinates(relative);
-		if(isInBoundingBox(rotated))
-			return isLocallyInside(rotated); 
-		else
-			return false;
-	}
-	public final  boolean isInside(Vector3i vec) {
-		Vector3d relative = getRelativeCoordinates(vec.toDouble());
-		Vector3d rotated  = getRotatedCoordinates(relative);
-		if(isInBoundingBox(rotated))
-			return isLocallyInside(rotated); 
-		else
-			return false;
-	}
-	
-	public final Vector2i getRandomInternalPoint() {
-		Vector2d relative = getRandLocalPoint();
-		Vector2d rotated  = getReverseRotatedCoordinates(relative);
-		return createOffsetPoint(rotated);
-	}
-	
-	public final double getNormalizedDistanceToEdge(Vector2i vec) {
-		Vector2d relative = getRelativeCoordinates(vec.toDouble());
-		Vector2d rotated  = getRotatedCoordinates(relative);
-		return getDistanceToLocalEdge(rotated);
-	}
-	
-	public final double getNormalizedDistanceToEdge(Vector3i vec) {
-		Vector3d relative = getRelativeCoordinates(vec.toDouble());
-		Vector3d rotated  = getRotatedCoordinates(relative);
-		return getDistanceToLocalEdge(rotated);
-	}
-	
 	@Override
-	public Vector2i getModifiedPoint(Vector2i vec) {
-		return vec;
-	}
-
-	@Override
-	public Vector3i getModifiedPoint(Vector3i vec) {
-		return vec;
+	public String toString() {
+		return "model:" + model.toString() + " offset:" +pointModifier.toString() + " rand" + random.hashCode();
 	}
 	
 }

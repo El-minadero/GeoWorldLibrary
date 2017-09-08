@@ -10,12 +10,15 @@ import java.util.HashSet;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
-
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Comparison;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.DataFactory;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.GenerationData;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.IGeologyData;
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Order;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Comparison;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.EmptyDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.GenerationData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Order;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractAlteration;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractRock;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.Surface;
 
 abstract class AbstractNode extends Comparison implements IGeologyNode {
 
@@ -24,7 +27,7 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 	private HashSet<IGeologyNode> external;
 	private HashSet<IGeologyNode> total;
 	
-	AbstractNode(NodeBuilder nodeBuilder){
+	AbstractNode(INodeBuilder nodeBuilder){
 		prototype =  nodeBuilder.getPrototype();
 		internal 	   = new HashSet<>();
 		external 	   = new HashSet<>();
@@ -37,18 +40,43 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 		total 		   = new HashSet<>();
 	}
 	
+	public AbstractNode() {
+		this.prototype = new NullPrototype();
+		internal 	   = new HashSet<>();
+		external 	   = new HashSet<>();
+		total 		   = new HashSet<>();
+	}
+	
+	public int getRGBDebugAtCoordinates(Vector3i query) {
+		int rgb =0;
+		for(IGeologyNode n : total) {
+			rgb+=n.getRGBDebugAtCoordinates(query);
+		}
+		rgb+=prototype.getRGBDebugAtCoordinates(query);
+		rgb+=additionalInfoRGBDebug(query);
+		return rgb;
+	}
+	protected int additionalInfoRGBDebug(Vector3i query){
+		return 0;
+	}
+
 	public int getSubOrder() { return prototype.getSubOrder(); }
 	public Order getOrder() { return prototype.getOrder(); }
 
 	public final String getName() { return prototype.getName(); }
 	public final boolean isLeaf() { return false; }
 	
-	public final void primeGeneration(GenerationData metaData) {
+	public final void loadNearbyNodes(GenerationData metaData) {
 		clearChildren();
 		GenerationData data2 = metaData.getCopy();
-		prime(data2);
+		cacheNearbyNodes(data2);
 		primeGenerationList(data2);
 	}
+	public final void primeLoadedObjects(GenerationData metaData) {
+		GenerationData data2 = metaData.getCopy();
+		primeGeneratedObjects(data2);
+	}
+
 	
 	private void clearChildren() {
 		internal.clear();
@@ -57,19 +85,29 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 	}
 	
 	private final void primeGenerationList(GenerationData data) {
-		prototype.primeGeneration(data);
+		prototype.loadNearbyNodes(data);
 		if(!internal.isEmpty() )
 			for(IGeologyNode obj : internal)
-				obj.primeGeneration(data);
+				obj.loadNearbyNodes(data);
 		else if(!external.isEmpty())
 			for(IGeologyNode obj : external)
-				obj.primeGeneration(data);
+				obj.loadNearbyNodes(data);
 		total.addAll(internal);
 		total.addAll(external);
 		
 	}
 	
-	protected abstract void prime(GenerationData metaData);
+	public void primeGeneratedObjects(GenerationData data){
+		prototype.primeLoadedObjects(data);
+		if(!internal.isEmpty())
+			for(IGeologyNode obj : internal)
+				obj.primeLoadedObjects(data);
+		else if(!external.isEmpty())
+			for(IGeologyNode obj : external)
+				obj.primeLoadedObjects(data);
+	}
+	
+	protected abstract void cacheNearbyNodes(GenerationData metaData);
 	
 	protected final void setInternalList(Collection<IGeologyNode> i) {
 		internal.addAll(i);
@@ -79,10 +117,10 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 		external.addAll(i);
 	}
 
-	protected final IGeologyData getPrototype3DData(IGeologyData testData,Vector3i query) {
+	protected final ISingularGeologyData getPrototype3DData(ISingularGeologyData testData,Vector3i query) {
 		return prototype.get3DGeologyData(testData, query);
 	}
-	protected final IGeologyData getPrototype2DData(IGeologyData testData,Vector2i query) {
+	protected final ISingularGeologyData getPrototype2DData(ISingularGeologyData testData,Vector2i query) {
 		return prototype.get2DGeologyData(testData, query);
 	}
 	public final double getExternalDecay(Vector2i vec) { return prototype.getExternalDecay(vec); }
@@ -97,33 +135,33 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 	public Vector2i getRandomInternalPoint() { return prototype.getRandomInternalPoint(); }
 
 	@Override
-	public IGeologyData get2DGeologyData(IGeologyData testDat, Vector2i vec) {
+	public ISingularGeologyData get2DGeologyData(ISingularGeologyData testDat, Vector2i vec) {
 		if(total.isEmpty())
 			return prototype.get2DGeologyData(testDat,vec);
 		HashSet<IGeologyNode> tempTotal = (HashSet<IGeologyNode>) total.clone();
 		return getCombined2DConditions(testDat,vec,tempTotal);
 	}
 
-	public IGeologyData get3DGeologyData(IGeologyData testDat, Vector3i vec) {
+	public ISingularGeologyData get3DGeologyData(ISingularGeologyData testDat, Vector3i vec) {
 		if(total.isEmpty())
 			return prototype.get3DGeologyData(testDat,vec);
 		HashSet<IGeologyNode> tempTotal = (HashSet<IGeologyNode>) total.clone();
 		return getCombined3DConditions(testDat,vec,tempTotal);
 	}
 
-	protected abstract  IGeologyData getCombined2DConditions(IGeologyData testData, Vector2i vec
+	protected abstract  ISingularGeologyData getCombined2DConditions(ISingularGeologyData testData, Vector2i vec
 			, HashSet<IGeologyNode> tempTotal);
 
-	protected abstract IGeologyData getCombined3DConditions(IGeologyData testData, Vector3i vec
+	protected abstract ISingularGeologyData getCombined3DConditions(ISingularGeologyData testData, Vector3i vec
 			, HashSet<IGeologyNode> tempTotal);
 	
-	protected void mergeData(IGeologyData testData, IGeologyData data, 
-			Vector3i vec,HashSet<IGeologyNode> objList) {
+	protected void mergeData(ISingularGeologyData testData, ISingularGeologyData dataNode, 
+			Vector3i query,HashSet<IGeologyNode> objList) {
 		for(IGeologyNode obj : objList)
-			data.merge(obj.get3DGeologyData(testData,vec));
+			dataNode.merge(obj.get3DGeologyData(testData,query));
 	}
 	
-	protected void mergeData(IGeologyData testData, IGeologyData data, 
+	protected void mergeData(ISingularGeologyData testData, ISingularGeologyData data, 
 			Vector2i vec,HashSet<IGeologyNode> objList) {
 		for(IGeologyNode obj : objList)
 			data.merge(obj.get2DGeologyData(testData,vec));
@@ -143,4 +181,9 @@ abstract class AbstractNode extends Comparison implements IGeologyNode {
 	public final int hashCode(){
 		return prototype.hashCode();
 	}
+	@Override
+	public final ISingularGeologyData getStartingData(ISingularGeologyData dataType) {
+		return prototype.getStartingData(dataType);
+	}
+
 }

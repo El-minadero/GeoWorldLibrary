@@ -2,54 +2,84 @@ package net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes;
 
 import java.util.Random;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
+import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
+
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
+import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
 
-public class RegionFactory {
+abstract class RegionFactory {
+
+	protected abstract IConic createConic(double[] axis);
+	protected abstract IBoundingBox createBoundingBox(double[] axis, Random rand);
 	
-	private static Region MakeEllipse(Vector2i vec,double xAxis,
-			double yAxis,double theta) {
-		return new Ellipse(vec,xAxis,yAxis,theta);
-	}
-	
-	private static Region MakeRectangle(Vector2i vec,double xAxis,
-			double yAxis,double theta) {
-		return new Rectangle(vec,xAxis,yAxis,theta);
-	}
-	
-	/**
-	 * 
-	 * @param type the RegionType to make
-	 * @param vec  the Region Center
-	 * @param a	   the unrotated x axis length
-	 * @param b	   the unrotated y axis length	
-	 * @param t	   the xy plane rotation.
-	 * @return
-	 */
-	public static Region MakeRegionType(RegionTypes type, Vector2i vec,
-			double a, double b, double t) {
-		if(type.equals(RegionTypes.ELLIPSE))
-			return MakeEllipse(vec,a,b,t);
-		else if(type.equals(RegionTypes.ELLIPSOID))
-			return MakeEllipsoid(vec,a,b,t);
-		else
-			return MakeRectangle(vec,a,b,t);
-	}
-	
-	public static Region MakeEllipsoid(Vector3i vec, double a, double b,
-			double c) {
-		return new Ellipsoid(vec,a,b,c);
-	}
-	
-	private static Region MakeEllipsoid(Vector2i vec, double a, double b,
-			double c) {
-		return new Ellipsoid(new Vector3i(vec.getX(),0,vec.getY()),a,b,c);
+	public Region getRegion(Vector2i vec, double[] axis, boolean b) {
+		Random rand = getRandomObject(vec);
+		IRelativePointModifier pointModifier = getPointModifier(vec,b,rand);
+		IConic conic = createConic(axis);
+		IBoundingBox box = createBoundingBox(axis,rand);
+		BoundingModel model = new BoundingModel(box,conic);
+		return new Shape(model, pointModifier, rand);
 	}
 
-	public static Region MakeRegionOffsetByMap(Region region, PointModifier modifier) {
-		return new OffsetRegion(region,modifier);
+	public Region getRegion(Vector3i vec, double[] axis, boolean b) {
+		Random rand = getRandomObject(vec);
+		IRelativePointModifier pointModifier = getPointModifier(vec,b,rand);
+		IConic conic = createConic(axis);
+		IBoundingBox box = createBoundingBox(axis,rand);
+		BoundingModel model = new BoundingModel(box,conic);
+		return new Shape(model, pointModifier, rand);
+	}
+	private Rotation create3DRotation(Random rand, boolean isRandom) {
+		double yAxisRot=0;
+		double xAxisRot=0;
+		double zAxisRot=0;
+		if(isRandom) {
+			xAxisRot = rand.nextDouble()*Math.PI;
+			yAxisRot = rand.nextDouble()*Math.PI;
+			zAxisRot = rand.nextDouble()*Math.PI;
+		}
+		return new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 
+				xAxisRot, yAxisRot, zAxisRot);
+	}
+	private Rotation create2DRotation(Random rand, boolean isRandom) {
+		double yAxisRot=0;
+		double xAxisRot=0;
+		double zAxisRot=0;
+		if(isRandom) {
+			yAxisRot = rand.nextDouble()*Math.PI;
+		}
+		return new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 
+				xAxisRot, yAxisRot, zAxisRot);
+	}
+	private Random getRandomObject(Vector3i vec) {
+		long seed = HashCodeOperations.createVectorSeed(vec);
+		Random rand = new Random(seed);
+		rand.nextDouble();
+		return rand;
+	}
+	private Random getRandomObject(Vector2i vec) {
+		long seed = HashCodeOperations.createVectorSeed(vec);
+		Random rand = new Random(seed);
+		rand.nextDouble();
+		return rand;
 	}
 	
+	private IRelativePointModifier getPointModifier(Vector2i center,boolean randomRotation,Random rand) {
+		Rotation rotation = create2DRotation(rand, randomRotation);
+		return new RelativeLocation.Builder()
+				.setCenter(center)
+				.setRotation(rotation)
+				.build2DLocation();
+	}
+	private IRelativePointModifier getPointModifier(Vector3i center,boolean randomRotation,Random rand) {
+		Rotation rotation = create3DRotation(rand, randomRotation);
+		return new RelativeLocation.Builder()
+				.setCenter(center)
+				.setRotation(rotation)
+				.build3DLocation();
+	}
 }

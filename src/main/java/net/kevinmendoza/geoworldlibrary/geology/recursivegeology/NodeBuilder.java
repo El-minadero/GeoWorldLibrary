@@ -1,35 +1,33 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
+import java.util.HashMap;
+
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMap;
 
-public final class NodeBuilder implements INodeBuilder {
+public class NodeBuilder implements INodeBuilder {
 	
 	private IGeologyNode prototype;
-	private int number;
-	private AbstractPrototypeFactory factory;
-	private NoiseMap controlMap;
+	private HashMap<Integer, AbstractPrototypeFactory> factoryMap;
 
-	public NodeBuilder setPrototype(AbstractPrototype prototype) {
+	public INodeBuilder setPrototype(AbstractPrototype prototype) {
 		this.prototype = prototype;
-		this.controlMap = prototype.getControlMap();
 		return this;
 	}
-
-	public NodeBuilder setSubObjectNumber(int number) {
-		this.number = number;
-		return this;
+	
+	public INodeBuilder setFactories(
+			HashMap<Integer, AbstractPrototypeFactory> factoryMap) {
+		this.factoryMap = factoryMap; return this;
 	}
 
-	public NodeBuilder setFactory(AbstractPrototypeFactory factory) {
-		this.factory = factory;
+	public INodeBuilder setSingleFactory(int subObjectNumber,AbstractPrototypeFactory factory) {
+		factoryMap = new HashMap<>();
+		factoryMap.put(subObjectNumber, factory);
 		return this;
 	}
-
+	
 	public Node build() { return new Node(this); }
 
-	IGeologyNode getPrototype() { return prototype;}
-	AbstractPrototypeFactory getFactory()     { return factory;  }
-	int getSubObjectNumber()		{ return number;   }
+	public IGeologyNode getPrototype() { return prototype;}
 
+	public HashMap<Integer, AbstractPrototypeFactory> getFactories() { return factoryMap; }
 }

@@ -3,6 +3,7 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 import java.util.Random;
 
 abstract class AbstractFactory {
+
 	private long SEED;
 	private Random random;
 	

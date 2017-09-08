@@ -1,16 +1,18 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.rockparameters.Comparison;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Comparison;
 
 class NodeCache extends Comparison {
 
 	private HashSet<IGeologyNode> geoMap;
-	private AbstractPrototypeFactory factory;
 	private Node node;
 	
 	/**
@@ -19,18 +21,22 @@ class NodeCache extends Comparison {
 	 * @param subObjects number of sub objects to make
 	 * @param node number of regions to make
 	 */
-	 NodeCache(AbstractPrototypeFactory factory, int subObjects,Node node) {
-		this.factory = factory;
+	 NodeCache(INodeBuilder nodeBuilder,Node node) {
 		this.node = node;
 		this.geoMap = new HashSet<>();
-		populateSubRegions(subObjects,node);
+		populateSubRegions(nodeBuilder);
 	}
 
-	private void populateSubRegions(int subObjects, Node node) {
-		for(int i = 0; i<subObjects;i++) {
-			IGeologyNode obj = factory.makePrototype(node.getRandomInternalPoint());
-			geoMap.add(obj);
-		}
+
+	 private void populateSubRegions(INodeBuilder builder) {
+		 HashMap<Integer,AbstractPrototypeFactory> factoryMap = builder.getFactories();
+		 for(Integer subNumber : factoryMap.keySet()) {
+			 AbstractPrototypeFactory factory = factoryMap.get(subNumber);
+			 for(int i = 0; i<subNumber;i++) {
+				 IGeologyNode obj = factory.makePrototype(node.getRandomInternalPoint());
+				 geoMap.add(obj);
+			 }
+		 }
 	}
 	
 	private void buildObjects(Vector2i check) {
@@ -40,7 +46,7 @@ class NodeCache extends Comparison {
 				removalSet.add(reg);
 		geoMap.removeAll(removalSet);
 		for(IGeologyNode reg : removalSet) {
-			IGeologyNode node = factory.makeObject((AbstractPrototype) reg);
+			IGeologyNode node = reg.getFactory().makeObject((AbstractPrototype) reg);
 			geoMap.add(node);
 		}
 	}
@@ -89,7 +95,7 @@ class NodeCache extends Comparison {
 			removalSet.add(reg);
 		geoMap.removeAll(removalSet);
 		for(IGeologyNode reg : removalSet) {
-			IGeologyNode node = factory.makeObject((AbstractPrototype) reg);
+			IGeologyNode node = reg.getFactory().makeObject((AbstractPrototype) reg);
 			geoMap.add(node);
 		}
 	}

@@ -1,10 +1,15 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
+import java.util.HashMap;
+
 public interface INodeBuilder {
 
-	public NodeBuilder setPrototype(AbstractPrototype prototype);
-	public NodeBuilder setSubObjectNumber(int number);
-	public NodeBuilder setFactory(AbstractPrototypeFactory factory);
+	public INodeBuilder setPrototype(AbstractPrototype prototype);
+	public INodeBuilder setFactories(HashMap<Integer,AbstractPrototypeFactory> factoryMap);
+	public INodeBuilder setSingleFactory(int subObjectNumber,AbstractPrototypeFactory factory);
+	
 	public Node build();
+	public IGeologyNode getPrototype();
+	public HashMap<Integer,AbstractPrototypeFactory> getFactories();
 
 }
