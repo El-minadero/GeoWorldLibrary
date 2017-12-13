@@ -40,9 +40,8 @@ public abstract class AbstractAlteration extends AbstractGeologyData {
 	public void merge(ISingularGeologyData data, double mergeWeight) {
 		if(isMergable(data)) {
 			AbstractAlteration other = (AbstractAlteration)data;
-			double invMerge = 1- mergeWeight;
 			for(int i=0;i<values.length;i++) {
-				values[i]*=values[i]*invMerge+other.getIndexValue(i)*mergeWeight;
+				values[i] = weightedDataMerge(values[i], other.getIndexValue(i), mergeWeight);
 			}
 		}
 	}

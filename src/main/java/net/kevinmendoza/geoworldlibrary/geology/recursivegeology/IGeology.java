@@ -1,5 +1,7 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology;
 
+import java.util.List;
+
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
@@ -10,6 +12,7 @@ import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractRock;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.Surface;
+import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node.INode;
 
 public interface IGeology {
 	
@@ -25,15 +28,18 @@ public interface IGeology {
 	 * @param metaData
 	 */
 	public void primeLoadedObjects(GenerationData metaData);
-	
-	public ISingularGeologyData get2DGeologyData(ISingularGeologyData testDat, Vector2i query);
-	
-	public ISingularGeologyData get3DGeologyData(ISingularGeologyData testDat, Vector3i query);
-	
-	public Order getOrder();
 
-	public int getRGBDebugAtCoordinates(Vector3i query);
+	/**
+	 *  get combined 2d data at this location;
+	 * @param metaData
+	 */
+	public ISingularGeologyData get3DGeologyData(ISingularGeologyData testDat, Vector3i vec);
+	public ISingularGeologyData get2DGeologyData(ISingularGeologyData testDat, Vector2i vec);
 	
 	public ISingularGeologyData getStartingData(ISingularGeologyData dataType);
+
+	public int getRGBDebugAtCoordinates(Vector3i query);
+
+	public String getLocationData(Vector3i globalVector);
 	
 }

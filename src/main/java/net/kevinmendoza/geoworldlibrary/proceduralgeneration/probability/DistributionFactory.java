@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.flowpowered.math.vector.Vector2i;
 
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
 
 public class DistributionFactory {
 
@@ -18,12 +18,12 @@ public class DistributionFactory {
 				.setBias(bias).setMax(max).setMin(min).setSkew(skew).setRandom(seed).Build();
 	}
 	
-	public static double UniformDoubleVarFromRegion(Region region, double min, double max) {
+	public static double UniformDoubleVarFromRegion(IRegion region, double min, double max) {
 		double range = max-min;
 		return region.getDouble()*range + min;
 	}
 	
-	public static int UniformIntVarFromRegion(Region region, double min, double max){
+	public static int UniformIntVarFromRegion(IRegion region, double min, double max){
 		double range = max-min;
 		return (int)(region.getDouble()*range + min);
 	}

@@ -35,6 +35,7 @@ repositories {
 dependencies {
 	shadow group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
     compile 'org.spongepowered:spongeapi:5.0.0'
+  	testCompile 'junit:junit:4.12'
 }
 
 shadowJar {

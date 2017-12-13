@@ -6,14 +6,6 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 import com.google.common.reflect.TypeToken;
 
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifierFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.Region;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.AbstractRegionFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.shapes.RegionTypes;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMap;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMapConfiguration;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMapFactory;
 import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
 import ninja.leaping.configurate.objectmapping.Setting;
 import ninja.leaping.configurate.objectmapping.serialize.ConfigSerializable;

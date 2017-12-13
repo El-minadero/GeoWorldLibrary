@@ -29,5 +29,9 @@ public interface IPointGenerator {
 	public Vector2i getFullCenter(Vector2i vec);
 
 	public int getRGBDebugVal(Vector3i query);
+
+	public void setSeed(long seed);
+
+	public boolean shouldBuild(Vector2i vec);
 	
 }

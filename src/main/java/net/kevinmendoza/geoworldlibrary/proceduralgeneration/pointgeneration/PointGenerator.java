@@ -7,18 +7,35 @@ import java.util.List;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
+import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
+
 class PointGenerator implements IPointGenerator {
 
 	private static long PRIME = 7;
 	private final double SPACING;
-	private final long SEED;
+	private long SEED;
+	private double FREQUENCY;
 	private static final int[] X = {0,-1,-1,-1, 0, 1,1,1,-2,-2,-2 ,2,2,2 , -1,0,1 -1,0,1  };
 	private static final int[] Z = {1, 1, 0,-1,-1,-1,0,1,-1,0,1   ,-1,0,1,  2,2,2,-2,-2,-2};
 	
+	@Override
+	public void setSeed(long seed) {
+		this.SEED = seed;
+	}
+	
 	private PointGenerator(PointGeneratorBuilder pointGeneratorBuilder) {
+		FREQUENCY = pointGeneratorBuilder.frequency;
 		SPACING = pointGeneratorBuilder.spacing;
 		SEED = pointGeneratorBuilder.seed;
 	}
+	
+	public boolean shouldBuild(Vector2i vec ) {
+		long s = HashCodeOperations.createVectorSeed(vec, SEED);
+		Random rand = new Random(s);
+		rand.nextDouble();
+		return (rand.nextDouble()<=FREQUENCY);
+	}
+	
 	@Override
 	public List<Vector2i> getFlooredCenterNeighborhood(Vector2i vec) {
 		Vector2i center = new Vector2i(Math.floor((double)(vec.getX())/SPACING),
@@ -43,15 +60,17 @@ class PointGenerator implements IPointGenerator {
 	
 	@Override
 	public Vector2i getFullCenter(Vector2i vec) {
-		long i = (vec.getX() * 661) + (vec.getY() * 701) % (1024+ SEED);
-		Random rand = new Random(i);
+		long newSeed = HashCodeOperations.createVectorSeed(vec, SEED);
+		Random rand = new Random(newSeed);
 		rand.nextDouble();
-		return new Vector2i(rand.nextDouble()*SPACING + vec.getX()*SPACING,
-										   rand.nextDouble()*SPACING + vec.getY()*SPACING);
+		int x = (int) (rand.nextDouble()*SPACING);
+		int y = (int) (rand.nextDouble()*SPACING);
+		return new Vector2i(x,y);
 	}
 	
 	public static class PointGeneratorBuilder {
 		
+		public double frequency;
 		private int spacing;
 		private long seed;
 
@@ -59,14 +78,10 @@ class PointGenerator implements IPointGenerator {
 			spacing = 50;
 			seed = 1;
 		}
-		public PointGeneratorBuilder withSpacing(int spacing) {
-			this.spacing = spacing;
-			return this;
-		}
-		public PointGeneratorBuilder withSeed(long seed) {
-			this.seed = seed;
-			return this;
-		}
+		public PointGeneratorBuilder withFrequency(double f)   { this.frequency = f; return this;     }
+		public PointGeneratorBuilder withSpacing(int spacing) { this.spacing = spacing; return this; }
+		public PointGeneratorBuilder withSeed(long seed) { this.seed = seed; return this; }
+		
 		public PointGenerator build() {
 			return new PointGenerator(this);
 		}
@@ -82,4 +97,5 @@ class PointGenerator implements IPointGenerator {
 		}
 		return rgb;
 	}
+
 }

@@ -1,9 +1,11 @@
 package net.kevinmendoza.geoworldlibrary.geology.compositerockdata;
 
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractAlteration;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractDataTest;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractRock;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.GeoWorldAlteration;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.GeoWorldRock;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.GeoWorldTestData;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.IAlterationBuilder;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.IRockBuilder;
 import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISurfaceBuilder;
@@ -14,6 +16,7 @@ public class DefaultDataFactory extends EmptyDataFactory {
 	private static GeoWorldRock.Builder RBuilder;
 	private static SurfaceBuilder SBuilder;
 	private static GeoWorldAlteration.Builder ABuilder;
+	private static GeoWorldTestData.Builder TBuilder;
 	
 	public static AbstractRock getRock(String rock, double cutoff) {
 		if(RBuilder==null) {
@@ -21,6 +24,14 @@ public class DefaultDataFactory extends EmptyDataFactory {
 		}
 		RBuilder.setCutoff(cutoff).setName(rock);
 		return RBuilder.build();
+	}
+	
+	public static AbstractDataTest getTestData(double val) {
+		if(TBuilder==null) {
+			TBuilder = new GeoWorldTestData.Builder();
+		}
+		TBuilder.setValue(val);
+		return TBuilder.build();
 	}
 	
 	public static Surface getSurface(int surf) {
