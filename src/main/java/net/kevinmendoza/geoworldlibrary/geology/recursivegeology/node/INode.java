@@ -1,38 +1,76 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node;
 
-import java.util.List;
-
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Order;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractAlteration;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractRock;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.IGeology;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.factory.AbstractPrototypeFactory;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.factory.INodeFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
+import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.INodeRegion;
 
-public interface INode extends IGeology {
+public interface INode extends INodeRegion,IGeology {
 	
+	/**
+	 *  Returns the name of the Node or its prototype
+	 * @return
+	 */
 	public String getName();
-	boolean isLeaf();
-	public INode convertToNode();
-	public boolean equals(Object o);
-	public int hashCode();
+	/**
+	 *  Returns some amount of human readable information
+	 * @return
+	 */
+	public String getLocationData(Vector3i vec);
 	
-	public boolean isInside(Vector2i center);
-	public boolean isInside(Vector3i query);
-	
+	/**
+	 *  Returns the double distance to the center of the IRegion shape within the prototype
+	 * @return
+	 */
 	public double getCenterDistance(Vector3i vec);
+	/**
+	 *  Returns the double distance to the center of the IRegion shape within the prototype
+	 * @return
+	 */
 	public double getCenterDistance(Vector2i vec);
 	
+	/**
+	 *  Returns a Vector2i point within the area defined by IRegion
+	 * @return
+	 */
 	public Vector2i getRandomInternalPoint2i();
+	/**
+	 *  Returns a Vector3i point within the area defined by IRegion
+	 * @return
+	 */
 	public Vector3i getRandomInternalPoint3i();
 	
-	public double getExternalDecay(Vector2i vec);
-	public double getExternalDecay(Vector3i vec);
-
+	/**
+	 *  Returns true if vector is inside the area defined by IRegion
+	 * @return
+	 */
+	public boolean isInside(Vector2i vector2i);
+	
+	public boolean isInside(Vector3i vector3i);
+	
+	/**
+	 *  Returns a data object defined by the Node, prototype, and any nested objects
+	 * @return IData data
+	 */
+	public IData getData(Vector2i vector2i);
+	/**
+	 *  Returns a data object defined by the Node, prototype, and any nested objects
+	 * @return IData data
+	 */
+	public IData getData(Vector3i vector3i);
+	/**
+	 *  return the external damping parameter;
+	 * @param vector2i
+	 * @return
+	 */
+	public double getExternalMultiplier(Vector2i vector2i);
+	/**
+	 *  return the external damping parameter;
+	 * @param vector2i
+	 * @return
+	 */
+	public double getExternalMultiplier(Vector3i vector3i);
 	
 }

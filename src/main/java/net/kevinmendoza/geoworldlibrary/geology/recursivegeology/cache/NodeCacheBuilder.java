@@ -1,25 +1,20 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache;
 
-import java.util.HashMap;
+import java.util.HashSet;
 
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.factory.INodeFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
+class NodeCacheBuilder {
 
-public class NodeCacheBuilder {
-
-	public HashMap<Integer, INodeFactory> getFactoryMap() {
-		// TODO Auto-generated method stub
-		return null;
+	private HashSet<ICache> caches;
+	
+	public NodeCacheBuilder() {
+		caches = new HashSet<>();
 	}
-
-	public double getSearchRadius() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public IRegion getSourceRegion() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public NodeCacheBuilder addCache(ICache cache) { caches.add(cache); return this;}
+	public HashSet<ICache> getCaches() { return caches; }
+	
+	public INodeCache build() {
+		return new NodeCache(this);
 	}
 
 }

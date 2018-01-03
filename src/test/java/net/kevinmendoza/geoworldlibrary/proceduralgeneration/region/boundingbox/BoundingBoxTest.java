@@ -5,10 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 
-@Suite.SuiteClasses({
-   Box2DTest.class,
-   Box3DTest.class,
-})
+@Suite.SuiteClasses({ Box2DTest.class, Box3DTest.class, })
 public class BoundingBoxTest {
 
 }

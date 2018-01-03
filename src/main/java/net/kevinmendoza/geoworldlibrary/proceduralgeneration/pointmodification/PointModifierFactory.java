@@ -12,15 +12,15 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.simplex.NoiseMap;
 public class PointModifierFactory {
 
 	
-	public static PointModifier CreateNoiseMapPointOffset(NoiseMap mapx, NoiseMap mapy, NoiseMap mapz) {
+	public static IPointModifier CreateNoiseMapPointOffset(NoiseMap mapx, NoiseMap mapy, NoiseMap mapz) {
 		return new NoiseMapModifier(mapx,mapy,mapz);
 	}
 	
-	public static PointModifier CreateNoiseMapPointOffset(NoiseMap map) {
+	public static IPointModifier CreateNoiseMapPointOffset(NoiseMap map) {
 		return new NoiseMapModifier(map);
 	}
 	
-	public static PointModifier CreateNullPointOffset() {
+	public static IPointModifier CreateNullPointOffset() {
 		return new NullModifier();
 	}
 	
@@ -32,7 +32,7 @@ public class PointModifierFactory {
 		return new Vector3i(vec.getX(),y,vec.getY());
 	}
 
-	public static PointModifier CreateStaticShiftOffset(int x, int y,
+	public static IPointModifier CreateStaticShiftOffset(int x, int y,
 			int z) {
 		return new StaticShiftModifier(x, y,z);
 	}

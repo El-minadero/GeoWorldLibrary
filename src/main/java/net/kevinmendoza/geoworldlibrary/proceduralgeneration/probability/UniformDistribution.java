@@ -2,7 +2,11 @@ package net.kevinmendoza.geoworldlibrary.proceduralgeneration.probability;
 
 import java.util.Random;
 
-class UniformDistribution implements Distribution {
+import com.flowpowered.math.vector.Vector2i;
+
+import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
+
+class UniformDistribution implements IProbability {
 
 	private double min;
 	private Random rand;
@@ -17,7 +21,15 @@ class UniformDistribution implements Distribution {
 	public double getRVar() {
 		return rand.nextDouble()*range + min;
 	}
-
+	public int getRVar(Vector2i vec,long seed) {
+		Random rand2 = HashCodeOperations.createVectorRandom(vec, seed);
+		if(range<0.000001) {
+			return (int) min;
+		}
+		else {
+			return (int) (rand2.nextInt((int)range) + min);
+		}
+	}
 	static class UniformBuilder { 
 		private Random rand = new Random(1);
 		private double max  = 1;
@@ -26,6 +38,7 @@ class UniformDistribution implements Distribution {
 		public UniformBuilder setRandom(long seed){ this.rand=new Random(seed); return this; }
 		public UniformBuilder setMax(double m) { this.max=m;  return this; }
 		public UniformBuilder setMin(double m) { this.min=m;  return this; }
-		public Distribution Build() { return new UniformDistribution(this); }
+		public IProbability Build() { return new UniformDistribution(this); }
 	}
+
 }

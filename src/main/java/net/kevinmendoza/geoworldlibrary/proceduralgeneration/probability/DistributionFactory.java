@@ -8,11 +8,11 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
 
 public class DistributionFactory {
 
-	public static Distribution BuildUniformDistribution(long seed, double min, double max){
+	public static IProbability BuildUniformDistribution(long seed, double min, double max){
 		return new UniformDistribution.UniformBuilder().setMax(max).setMin(min).setRandom(seed).Build();
 	}
 
-	public static Distribution BuildNormalDistribution(long seed, double min, double max, 
+	public static IProbability BuildNormalDistribution(long seed, double min, double max, 
 			double skew, double bias){
 		return new TruncatedSkewDistribution.SkewBuilder()
 				.setBias(bias).setMax(max).setMin(min).setSkew(skew).setRandom(seed).Build();

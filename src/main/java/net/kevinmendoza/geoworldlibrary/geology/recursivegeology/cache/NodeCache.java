@@ -1,96 +1,95 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
+import com.flowpowered.math.vector.Vectori;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Comparison;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.factory.AbstractPrototypeFactory;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.factory.INodeFactory;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node.INode;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node.INodeBuilder;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.IPointGenerator;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
 
-class NodeCache extends Cache {
+class NodeCache implements INodeCache {
 
-	private final double searchRadius;
-	private HashMap<Integer,INodeFactory> factoryMap;
-	private final IRegion sourceRegion;
+	private static final int externalLimit = 4;
+	private Vector2i vector2i;
+	private HashSet<ICache> 		cacheSet;
+	private Set<INodeRegion> 	internalNodes;
+	private Set<INodeRegion> 	externalNodes;
 	
-	public NodeCache(NodeCacheBuilder builder) {
-		double s			= builder.getSearchRadius();
-		searchRadius = s*s;
-		factoryMap		= builder.getFactoryMap();
-		sourceRegion		= builder.getSourceRegion();
+	NodeCache(NodeCacheBuilder builder){
+		internalNodes 	= new HashSet<>();
+		externalNodes 	= new HashSet<>();
+		cacheSet 		= builder.getCaches();
+	}
+	
+	@Override
+	public final void loadNodes(Vector2i vec) {
+		clearNodes();
+		vector2i = vec;
+		for(ICache cache : cacheSet) {
+			Set<Vector2i> keys = cache.getLocalKeys(vec);
+			internalNodes.addAll(cache.getInternalRegionsFromKeySet(keys, vec));
+			externalNodes.addAll(cache.getExternalRegionsFromKeySet(keys, vec));
+		}
+	}
+	
+	@Override
+	public final void loadNodes(Vector3i vec) {
+		clearNodes();
+		vector2i = make2DVec(vec);
+		for(ICache cache : cacheSet) {
+			Set<Vector2i> keys = cache.getLocalKeys(vector2i);
+			internalNodes.addAll(cache.getInternalRegionsFromKeySet(keys, vector2i));
+			externalNodes.addAll(cache.getExternalRegionsFromKeySet(keys, vector2i));
+		}
+	}
+	
+	private Vector2i make2DVec(Vector3i vec1) {
+		return new Vector2i(vec1.getX(),vec1.getZ());
+	}
+	
+	private void clearNodes() {
+		internalNodes.clear();
+		externalNodes.clear();
 	}
 
-	@Override
-	public INode populateKeyValue(Vector2i vec) {
-		return null;
-	}
-
-	@Override
-	public String getLocationString(Vector3i globalVector) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Vector2i> getLocalKeys(Vector2i k) {
-		List<Vector2i> locals = new ArrayList<>();
-		List<Vector2i> keys = super.getKeyList();
-		for(Vector2i key : keys) {
-			INode node = super.getValue(key);
-			if(node.getCenterDistance(k)<searchRadius){
-				locals.add(key);
+	public final Set<INodeRegion>  getNodes()  {
+		if(internalNodes.isEmpty()) {
+			TreeSet<INodeRegion> newNodes = new TreeSet<>(new NodeComparator(vector2i));
+			newNodes.addAll(externalNodes);
+			int externalNodes = 0;
+			Set<INodeRegion> returningSet = new HashSet<>();
+			for(INodeRegion region : newNodes) {
+				if(externalNodes>externalLimit) {
+					break;
+				}
+				returningSet.add(region);
+				externalNodes++;
 			}
+			return returningSet;
 		}
-		return locals;
-	}
-	@Override
-	public List<Vector2i> getLocalKeys(Vector3i k) {
-		List<Vector2i> locals = new ArrayList<>();
-		List<Vector2i> keys = super.getKeyList();
-		for(Vector2i key : keys) {
-			INode node = super.getValue(key);
-			if(node.getCenterDistance(k)<searchRadius){
-				locals.add(key);
-			}
-		}
-		return locals;
-	}
-
-	@Override
-	public List<INode> getClosestNodesToLocation(Vector3i globalVec) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void populateIfNecessary() {
-		for(int i : factoryMap.keySet()) {
-			Vector2i key = sourceRegion.getRandom2iPoint();
-			INode value = factoryMap.get(i).makePrototype(sourceRegion);
-			super.addKeyValuePair(key, value);
-		}
-		factoryMap.clear();
-	}
-
-	@Override
-	public void setSeed(long seed) {
-		for(INodeFactory f : factoryMap.values()) {
-			f.setSeed(seed);
+		else {
+			return internalNodes;
 		}
 	}
-
 	
-	 
-	
-
+	private static class NodeComparator implements Comparator<INodeRegion> {
+		
+		private final Vector2i vec;
+		NodeComparator(Vector2i vec){
+			this.vec = vec;
+		}
+		
+		@Override
+		public int compare(INodeRegion o1, INodeRegion o2) {
+			double dist1 = o1.getCenterDistance(vec);
+			double dist2 = o2.getCenterDistance(vec);
+			if(dist1 > dist2) 	{ return  1;	}
+			else 				{ return -1;	}
+		}
+	}
 }

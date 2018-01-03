@@ -6,7 +6,7 @@ import java.util.Random;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifier;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.IPointModifier;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.boundingbox.BoundingBoxFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.boundingmodel.IBoundingModel;

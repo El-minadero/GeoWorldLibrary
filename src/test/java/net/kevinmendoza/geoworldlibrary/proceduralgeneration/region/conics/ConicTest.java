@@ -5,12 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 
-@Suite.SuiteClasses({
-   BoxConicTest.class,
-   EllipseTest.class,
-   EllipsoidTest.class,
-   RectangleConicTest.class
-})
+@Suite.SuiteClasses({ BoxConicTest.class, EllipseTest.class, EllipsoidTest.class, RectangleConicTest.class })
 
-public class ConicTest {   
-}  
+public class ConicTest {
+}

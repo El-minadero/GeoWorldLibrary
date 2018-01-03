@@ -13,11 +13,7 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.relativeloca
 
 @RunWith(Suite.class)
 
-@Suite.SuiteClasses({
-   BoundingBoxTest.class,
-   ConicTest.class,
-   RelativeSpaceTest.class
-})
+@Suite.SuiteClasses({ BoundingBoxTest.class, ConicTest.class, RelativeSpaceTest.class })
 public class RegionTest {
 
 }

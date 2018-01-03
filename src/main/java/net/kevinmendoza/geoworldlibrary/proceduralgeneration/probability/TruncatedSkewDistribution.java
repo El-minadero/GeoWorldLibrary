@@ -2,7 +2,11 @@ package net.kevinmendoza.geoworldlibrary.proceduralgeneration.probability;
 
 import java.util.Random;
 
-class TruncatedSkewDistribution implements Distribution{
+import com.flowpowered.math.vector.Vector2i;
+
+import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
+
+class TruncatedSkewDistribution implements IProbability{
 
 	private final Random rand;
 	private final double max;
@@ -18,10 +22,26 @@ class TruncatedSkewDistribution implements Distribution{
 		this.bias = builder.bias;
 	}
 
+	public int getRVar(Vector2i vec,long seed) {
+		Random rand2 = HashCodeOperations.createVectorRandom(vec, seed);
+		return (int) (getRVar(rand2));
+	}
+	
 	public double getRVar() {
 		double range = max - min;
 		double mid = min + (range / 2.0);
 		double unitGaussian = rand.nextGaussian();
+		double biasFactor = Math.exp(bias);
+		double retval = mid + (range
+				* (biasFactor / (biasFactor + Math.exp(-unitGaussian / skew))
+						- 0.5));
+		return retval;
+	}
+	
+	public double getRVar(Random rand2) {
+		double range = max - min;
+		double mid = min + (range / 2.0);
+		double unitGaussian = rand2.nextGaussian();
 		double biasFactor = Math.exp(bias);
 		double retval = mid + (range
 				* (biasFactor / (biasFactor + Math.exp(-unitGaussian / skew))
@@ -42,6 +62,6 @@ class TruncatedSkewDistribution implements Distribution{
 		public SkewBuilder setMin(double m) { this.min=m;  return this; }
 		public SkewBuilder setSkew(double s){ this.skew=s; return this; }
 		public SkewBuilder setBias(double b){ this.bias=b; return this; }
-		public Distribution Build() { return new TruncatedSkewDistribution(this); }
+		public IProbability Build() { return new TruncatedSkewDistribution(this); }
 	}
 }

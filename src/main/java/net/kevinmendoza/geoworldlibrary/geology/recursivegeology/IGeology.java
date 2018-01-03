@@ -5,41 +5,12 @@ import java.util.List;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.GenerationData;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IGeologyData;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.Order;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractAlteration;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.AbstractRock;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.ISingularGeologyData;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.singleagedata.Surface;
-import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node.INode;
+import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
 
 public interface IGeology {
 	
-	/**
-	 *  Uses the 2d coordinate stored in metaData to load all Objects close to the coordinate. 
-	 *  
-	 * @param metaData
-	 */
-	public void loadNearbyNodes(GenerationData metaData);
+	public IData getData(Vector2i vector2i);
+	public IData getData(Vector3i vector3i);
 	
-	/**
-	 *  Uses metaData to update all geologic objects. the objects themselves can decide if they need this info.
-	 * @param metaData
-	 */
-	public void primeLoadedObjects(GenerationData metaData);
-
-	/**
-	 *  get combined 2d data at this location;
-	 * @param metaData
-	 */
-	public ISingularGeologyData get3DGeologyData(ISingularGeologyData testDat, Vector3i vec);
-	public ISingularGeologyData get2DGeologyData(ISingularGeologyData testDat, Vector2i vec);
-	
-	public ISingularGeologyData getStartingData(ISingularGeologyData dataType);
-
-	public int getRGBDebugAtCoordinates(Vector3i query);
-
-	public String getLocationData(Vector3i globalVector);
 	
 }
