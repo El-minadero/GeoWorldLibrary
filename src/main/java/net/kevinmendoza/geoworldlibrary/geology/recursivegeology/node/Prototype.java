@@ -3,13 +3,13 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IDataFactory;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IDecay;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDecay;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.IPointModifier;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
 
-public final class Prototype implements INode, IPrototype {
+public final class Prototype implements INode {
 
 	private final IRegion region;
 	private final String name;
@@ -22,10 +22,11 @@ public final class Prototype implements INode, IPrototype {
 		region 		= builder.getRegion();
 		name 		= builder.getName();
 		modifier		= builder.getPointModifier();
-		decay 		= builder.getExternalDecay();
+		decay 		= builder.getDecay();
 	}
 
 	public final boolean isLeaf() 	{ return true; 	}
+	
 	public final String getName() 	{ return name;	}
 	
 	public final boolean isInside(Vector2i vector2i) 
@@ -43,27 +44,41 @@ public final class Prototype implements INode, IPrototype {
 	public final Vector3i getRandomInternalPoint3i() 
 									{ return region.getRandom3iPoint(); }
 
+	public final IData getData(Vector2i vector2i) {
+		Vector2i modifiedPoint = modifier.getPoint(vector2i);
+		IData data = getDefaultData(modifiedPoint);
+		double modifier = getExternalMultiplier(vector2i);
+		data.modifyData(modifier);
+		return data;
+	}
+
+	public final IData getData(Vector3i vector3i) {
+		Vector3i modifiedPoint = modifier.getPoint(vector3i);
+		IData data = getDefaultData(modifiedPoint);
+		double modifier = getExternalMultiplier(vector3i);
+		data.modifyData(modifier);
+		return data;
+	}
 	
-	
-	public IData getData(Vector2i vector2i) {
+	public final IData getDefaultData(Vector2i vector2i) {
 		Vector2i modifiedPoint = modifier.getPoint(vector2i);
 		IData data = dataFactory.getData(modifiedPoint);
 		return data;
 	}
 
-	public IData getData(Vector3i vector3i) {
+	public final IData getDefaultData(Vector3i vector3i) {
 		Vector3i modifiedPoint = modifier.getPoint(vector3i);
 		IData data = dataFactory.getData(modifiedPoint);
 		return data;
 	}
 
-	public double getExternalMultiplier(Vector2i vector2i) {
+	public final double getExternalMultiplier(Vector2i vector2i) {
 		Vector2i modifiedPoint = modifier.getPoint(vector2i);
 		double distance = region.getNormalizedDistanceToEdge(modifiedPoint);
 		return decay.getModifier(distance);
 	}
 
-	public double getExternalMultiplier(Vector3i vector3i) {
+	public final double getExternalMultiplier(Vector3i vector3i) {
 		Vector3i modifiedPoint = modifier.getPoint(vector3i);
 		double distance = region.getNormalizedDistanceToEdge(modifiedPoint);
 		return decay.getModifier(distance);

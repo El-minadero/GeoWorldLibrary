@@ -6,7 +6,7 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.boundingbox.
 
 public class ConicFactory {
 
-	public IConic createConic(ConicType type, int[] dims) {
+	public static IConic createConic(ConicType type, int[] dims) {
 		double[] d = new double[dims.length];
 		for(int i = 0; i<dims.length;i++) { d[i] = dims[i]; }
 		IConicBuilder builder;

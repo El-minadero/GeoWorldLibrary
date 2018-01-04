@@ -1,4 +1,4 @@
-package net.kevinmendoza.geoworldlibrary.geology.compositerockdata;
+package net.kevinmendoza.geoworldlibrary.geology.rockdata;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;

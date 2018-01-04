@@ -3,9 +3,9 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.IGeology;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.INodeRegion;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
 
 public interface INode extends INodeRegion,IGeology {
 	
@@ -60,6 +60,18 @@ public interface INode extends INodeRegion,IGeology {
 	 * @return IData data
 	 */
 	public IData getData(Vector3i vector3i);
+	/**
+	 *  Returns a data object defined by the Node, prototype, and any nested objects without
+	 *  applied decay values for the object in question
+	 * @return IData data
+	 */
+	public IData getDefaultData(Vector2i vector2i);
+	/**
+	 *  Returns a data object defined by the Node, prototype, and any nested objects without
+	 *  applied decay values for the object in question
+	 * @return IData data
+	 */
+	public IData getDefaultData(Vector3i vector3i);
 	/**
 	 *  return the external damping parameter;
 	 * @param vector2i

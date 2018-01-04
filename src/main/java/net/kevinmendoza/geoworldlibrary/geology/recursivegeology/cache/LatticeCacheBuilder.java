@@ -6,7 +6,7 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.IPo
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.PointGeneratorFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
 
-class LatticeCacheBuilder  {
+public class LatticeCacheBuilder  {
 
 	private ICacheFactory cacheFactory;
 	private IPointGenerator generator;
@@ -14,6 +14,7 @@ class LatticeCacheBuilder  {
 	public LatticeCacheBuilder() {
 		generator =  PointGeneratorFactory
 				.makeSinglePointLattice(0, 10, 0);
+
 	}
 
 	public LatticeCacheBuilder setFactory(ICacheFactory factory) 

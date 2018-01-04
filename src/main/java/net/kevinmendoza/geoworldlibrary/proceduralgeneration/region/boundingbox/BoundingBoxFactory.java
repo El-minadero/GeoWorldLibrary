@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class BoundingBoxFactory {
 
-	public IBoundingBox createBoundingBox(BoxType type, int[] axis,Random rand) {
+	public static IBoundingBox createBoundingBox(BoxType type, int[] axis,Random rand) {
 		IBoxBuilder builder;
 		switch(type) {
 		case D2: 

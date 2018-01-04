@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
 public class MapTest {
 
 	@Test

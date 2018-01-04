@@ -49,4 +49,12 @@ public class HashCodeOperations {
 		rand.nextDouble();
 		return rand;
 	}
+
+	public static long createHash(int a, int b) {
+		return (a*661) + b;
+	}
+
+	public static long createHash(int a, int b, int c) {
+		return ((a*661) +b) + c*331;
+	}
 }

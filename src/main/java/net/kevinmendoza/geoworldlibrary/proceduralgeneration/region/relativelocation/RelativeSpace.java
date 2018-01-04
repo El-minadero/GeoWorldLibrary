@@ -50,7 +50,8 @@ abstract class RelativeSpace implements IRelativeSpace {
 	public String toString() {
 		Vector3D vector3D = rotation.getAxis(RotationConvention.VECTOR_OPERATOR);
 		double angle = Math.floor(Math.toDegrees(rotation.getAngle())*100)/100;
-		return "rotation:\n"  + 
+		return "======= Relative Coordinate Transform ======" + 
+				"rotation:\n"  + 
 				"rotation Vector:" + vector3D.toString() +"\n" +
 				"rotation Angle:" + angle + "\n" 
 				+"Center Coordinates (3d):" + center3.toString();

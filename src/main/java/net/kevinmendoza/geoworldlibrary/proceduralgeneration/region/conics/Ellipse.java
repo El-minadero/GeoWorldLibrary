@@ -44,7 +44,9 @@ class Ellipse implements IConic {
 	public double getResidual(Vector2i point) {
 		int x = point.getX();
 		int y = point.getY();
-		return Math.abs(x*x*xAxis2inv + y*y*yAxis2inv - 1);
+		double xVal = x*x*xAxis2inv;
+		double yVal = y*y*yAxis2inv;
+		return Math.abs(xVal + yVal - 1);
 	}
 
 	@Override

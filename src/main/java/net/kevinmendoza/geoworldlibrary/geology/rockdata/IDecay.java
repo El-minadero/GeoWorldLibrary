@@ -1,4 +1,4 @@
-package net.kevinmendoza.geoworldlibrary.geology.compositerockdata;
+package net.kevinmendoza.geoworldlibrary.geology.rockdata;
 
 public interface IDecay {
 

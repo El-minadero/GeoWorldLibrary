@@ -73,26 +73,6 @@ public class NodeCacheTest {
 		nodeset.addAll(cache.getNodes());
 		assertTrue(!nodeset.isEmpty(),"NO NODES!?");
 	}
-
-	@Test
-	public void load_External_Nodes() throws Exception {
-		INodeCache cache = nodeCacheBuilder.build();
-		cache.loadNodes(center);
-		Set<INodeRegion> externals = cache.getNodes();
-		for(INodeRegion region : externals) {
-			assertTrue(!region.isInside(center),"Did not return proper region Set");
-		}
-	}
-
-	@Test
-	public void load_Internal_Nodes() throws Exception {
-		INodeCache cache = nodeCacheBuilder.build();
-		cache.loadNodes(center);
-		Set<INodeRegion> externals = cache.getNodes();
-		for(INodeRegion region : externals) {
-			assertTrue(region.isInside(center),"Did not return proper region Set");
-		}
-	}
 	
 	private static class NullCloudTest implements IPointCloud {
 

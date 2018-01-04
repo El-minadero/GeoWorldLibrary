@@ -10,7 +10,7 @@ public interface INodeCache {
 	
 	void loadNodes(Vector2i vec);
 	void loadNodes(Vector3i vec);
-	
+
 	Set<INodeRegion> getNodes();
 
 }

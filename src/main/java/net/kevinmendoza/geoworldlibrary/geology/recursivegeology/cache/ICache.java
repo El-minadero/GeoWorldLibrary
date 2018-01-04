@@ -8,7 +8,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 import com.flowpowered.math.vector.Vectori;
 
-interface ICache {
+public interface ICache {
 	/**
 	 * Given a global coordinate, return a list of closest sub object keys
 	 * @param globalVector

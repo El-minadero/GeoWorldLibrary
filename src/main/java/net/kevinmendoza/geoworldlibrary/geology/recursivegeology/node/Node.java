@@ -5,23 +5,21 @@ import java.util.Set;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.INodeCache;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.INodeRegion;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
 
 class Node extends AbstractNode implements INode {
 
-	private final IPrototype prototype;
-	private final INodeCache cache;
+	private final INode prototype;
 	
 	Node(NodeBuilder nodeBuilder){
 		super(nodeBuilder);
 		prototype 		= nodeBuilder.getPrototype();
-		cache			= nodeBuilder.getCache();
 	}
 	
-	protected IData getBaseData(Vector3i vector3i) { return prototype.getData(vector3i); }
-	protected IData getBaseData(Vector2i vector2i) { return prototype.getData(vector2i); }
+	public IData getDefaultData(Vector3i vector3i) { return prototype.getDefaultData(vector3i); }
+	public IData getDefaultData(Vector2i vector2i) { return prototype.getDefaultData(vector2i); }
 	
 	public String getLocationData(Vector3i vec) 
 	{ return prototype.getLocationData(vec); }

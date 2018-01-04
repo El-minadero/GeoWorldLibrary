@@ -12,41 +12,43 @@ import com.flowpowered.math.vector.Vector3i;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.boundingbox.BoxType;
 
 public class RelativeSpaceFactory {
-
-	private RelativeSpaceBuilder builder = new RelativeSpaceBuilder();
 	
-	public IRelativeSpace createRelative2DFrame(Vector2i center, 
+	public static IRelativeSpace createRelative2DFrame(Vector2i center, 
 			Random rand, boolean isRandom) {
+		RelativeSpaceBuilder builder = new RelativeSpaceBuilder();
 		Rotation rotation = create2DRotation(rand,isRandom);
 		return builder.setCenter(center).setRotation(rotation).build2DLocation();
 	}
 	
-	public IRelativeSpace createRelative3DFrame(Vector3i center, 
+	public static IRelativeSpace createRelative3DFrame(Vector3i center, 
 			Random rand, boolean isRandom) {
+		RelativeSpaceBuilder builder = new RelativeSpaceBuilder();
 		Rotation rotation = create3DRotation(rand,isRandom);
 		return builder.setCenter(center).setRotation(rotation).build3DLocation();
 	}
-	public IRelativeSpace createRelative2DFrame(Vector2i center, double y) {
+	public static IRelativeSpace createRelative2DFrame(Vector2i center, double y) {
+		RelativeSpaceBuilder builder = new RelativeSpaceBuilder();
 		Rotation rotation = create2DRotation(y);
 		return builder.setCenter(center).setRotation(rotation).build2DLocation();
 	}
 	
-	public IRelativeSpace createRelative3DFrame(Vector3i center, 
+	public static IRelativeSpace createRelative3DFrame(Vector3i center, 
 			double x, double y, double z) {
+		RelativeSpaceBuilder builder = new RelativeSpaceBuilder();
 		Rotation rotation = create3DRotation(x,y,z);
 		return builder.setCenter(center).setRotation(rotation).build3DLocation();
 	}
 	
 	
-	private Rotation create3DRotation(double x, double y, double z) {
+	private static Rotation create3DRotation(double x, double y, double z) {
 		return new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 
 				x,y,z);
 	}
-	private Rotation create2DRotation(double y) {
+	private static Rotation create2DRotation(double y) {
 		return new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 
 				0,y,0);
 	}
-	private Rotation create3DRotation(Random rand, boolean isRandom) {
+	private static Rotation create3DRotation(Random rand, boolean isRandom) {
 		double yAxisRot=0;
 		double xAxisRot=0;
 		double zAxisRot=0;
@@ -58,7 +60,7 @@ public class RelativeSpaceFactory {
 		return new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 
 				xAxisRot, yAxisRot, zAxisRot);
 	}
-	private Rotation create2DRotation(Random rand, boolean isRandom) {
+	private static Rotation create2DRotation(Random rand, boolean isRandom) {
 		double yAxisRot=0;
 		if(isRandom) {
 			yAxisRot = rand.nextDouble()*Math.PI;

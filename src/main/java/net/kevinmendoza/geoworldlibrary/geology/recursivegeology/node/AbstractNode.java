@@ -5,9 +5,9 @@ import java.util.Set;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.INodeCache;
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.INodeRegion;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
 
 abstract class AbstractNode {
 	
@@ -20,7 +20,7 @@ abstract class AbstractNode {
 	public final IData getData(Vector3i vector3i) {
 		cache.loadNodes(vector3i);
 		Set<INodeRegion> nodes = cache.getNodes();
-		IData data1 = getBaseData(vector3i);
+		IData data1 = getDefaultData(vector3i);
 		IData data2 = getCombinedNodeData(vector3i,nodes);
 		double modifier 		= getModifier(vector3i);
 		IData combinedData 	= prepareData(data1, data2, modifier);
@@ -30,7 +30,7 @@ abstract class AbstractNode {
 	public final IData getData(Vector2i vector2i) {
 		cache.loadNodes(vector2i);
 		Set<INodeRegion> nodes = cache.getNodes();
-		IData data1 = getBaseData(vector2i);
+		IData data1 = getDefaultData(vector2i);
 		IData data2 = getCombinedNodeData(vector2i,nodes);
 		double modifier 			= getModifier(vector2i);
 		IData 	combinedData 	= prepareData(data1, data2, modifier);
@@ -39,8 +39,14 @@ abstract class AbstractNode {
 	
 	private IData prepareData(IData data1, IData data2, double modifier) {
 		data1.modifyData(modifier);
-		data2.modifyData(modifier);
-		IData 	combinedData = data1.merge(data2);
+		IData 	combinedData;
+		if(data2!=null) {
+			data2.modifyData(modifier);
+			combinedData = data1.merge(data2);
+		}
+		else {
+			combinedData = data1;
+		}
 		return 	combinedData;
 	}
 
@@ -89,6 +95,6 @@ abstract class AbstractNode {
 	protected abstract double getModifier(Vector2i vector2i);
 	protected abstract double getModifier(Vector3i vector3i);
 	
-	protected abstract IData getBaseData(Vector2i vector2i);
-	protected abstract IData getBaseData(Vector3i vector3i);
+	public abstract IData getDefaultData(Vector2i vector2i);
+	public abstract IData getDefaultData(Vector3i vector3i);
 }

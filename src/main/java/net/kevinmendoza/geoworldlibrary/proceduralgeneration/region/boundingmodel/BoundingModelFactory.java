@@ -5,7 +5,7 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.conics.IConi
 
 public class BoundingModelFactory {
 
-	public IBoundingModel makeBoundingModel(IConic conic ,IBoundingBox box) {
+	public static IBoundingModel makeBoundingModel(IConic conic ,IBoundingBox box) {
 		return new BoundingModel(conic,box);
 	}
 	

@@ -2,7 +2,7 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache;
 
 import java.util.HashSet;
 
-class NodeCacheBuilder {
+public class NodeCacheBuilder {
 
 	private HashSet<ICache> caches;
 	

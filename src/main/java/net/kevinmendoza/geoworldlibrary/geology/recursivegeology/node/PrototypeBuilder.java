@@ -1,19 +1,30 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node;
 
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IDecay;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IData;
-import net.kevinmendoza.geoworldlibrary.geology.compositerockdata.IDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.DecayFactory;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDecay;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.NullDataFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.IPointModifier;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifierFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.shape.ShapeFactory;
 
-class PrototypeBuilder {
+public class PrototypeBuilder {
 
 	private IRegion region;
 	private String name;
 	private IDataFactory dataFactory;
 	private IPointModifier pointModifier;
-	private IDecay internalDecay;
-	private  IDecay externalDecay;
+	private IDecay decay;
+	
+	public PrototypeBuilder() {
+		region 	= ShapeFactory.makeEllipse(10, 10);
+		name	 	= "default";
+		dataFactory = new NullDataFactory();
+		decay		= DecayFactory.getDefaultDecay();
+		pointModifier = PointModifierFactory.CreateNullPointOffset();
+		
+	}
 	public IRegion getRegion() {
 		return region;
 	}
@@ -38,19 +49,15 @@ class PrototypeBuilder {
 	public PrototypeBuilder setDataFactory(IDataFactory dataFactory) {
 		this.dataFactory = dataFactory; return this;
 	}
-	public IDecay getInternalDecay() {
-		return internalDecay;
+	public IDecay getDecay() {
+		return decay;
 	}
-	public PrototypeBuilder setInternalDecay(IDecay internalDecay) {
-		this.internalDecay = internalDecay; return this;
-	}
-	public IDecay getExternalDecay() {
-		return externalDecay;
-	}
-	public PrototypeBuilder setExternalDecay(IDecay externalDecay) {
-		this.externalDecay = externalDecay; return this;
+	public PrototypeBuilder setDecay(IDecay internalDecay) {
+		this.decay = internalDecay; return this;
 	}
 	
+	public INode build() {
+		return new Prototype(this);
+	}
 	
-
 }

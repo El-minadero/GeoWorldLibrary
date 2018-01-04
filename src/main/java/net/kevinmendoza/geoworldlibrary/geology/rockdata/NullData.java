@@ -1,6 +1,6 @@
-package net.kevinmendoza.geoworldlibrary.geology.compositerockdata;
+package net.kevinmendoza.geoworldlibrary.geology.rockdata;
 
-class NullData implements IData {
+public class NullData implements IData {
 
 	private double start = 1;
 	@Override
