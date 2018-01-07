@@ -18,7 +18,9 @@ abstract class AbstractNode {
 	}
 	
 	public final IData getData(Vector3i vector3i) {
-		cache.loadNodes(vector3i);
+		if(shouldLoadCaches(vector3i)) {
+			cache.loadNodes(vector3i);
+		}
 		Set<INodeRegion> nodes = cache.getNodes();
 		IData data1 = getDefaultData(vector3i);
 		IData data2 = getCombinedNodeData(vector3i,nodes);
@@ -27,8 +29,13 @@ abstract class AbstractNode {
 		return combinedData;
 	}
 
+	protected abstract boolean shouldLoadCaches(Vector3i vector3i);
+	protected abstract boolean shouldLoadCaches(Vector2i vector2i);
+
 	public final IData getData(Vector2i vector2i) {
-		cache.loadNodes(vector2i);
+		if(shouldLoadCaches(vector2i)) {
+			cache.loadNodes(vector2i);
+		}
 		Set<INodeRegion> nodes = cache.getNodes();
 		IData data1 = getDefaultData(vector2i);
 		IData data2 = getCombinedNodeData(vector2i,nodes);
@@ -53,14 +60,9 @@ abstract class AbstractNode {
 	private IData getCombinedNodeData(Vector2i vector2i, Set<INodeRegion> nodes) {
 		IData data = null;
 		IData tempData = null;
-		double modifier;
 		for(INodeRegion region : nodes) {
 			INode node = (INode)region;
 			tempData = node.getData(vector2i);
-			if(!node.isInside(vector2i)) {
-				modifier = node.getExternalMultiplier(vector2i);
-				tempData.modifyData(modifier);
-			}
 			if(data==null) {
 				data = tempData;
 			}
@@ -78,10 +80,6 @@ abstract class AbstractNode {
 		for(INodeRegion region : nodes) {
 			INode node = (INode)region;
 			tempData = node.getData(vector3i);
-			if(!node.isInside(vector3i)) {
-				modifier = node.getExternalMultiplier(vector3i);
-				tempData.modifyData(modifier);
-			}
 			if(data==null) {
 				data = tempData;
 			}

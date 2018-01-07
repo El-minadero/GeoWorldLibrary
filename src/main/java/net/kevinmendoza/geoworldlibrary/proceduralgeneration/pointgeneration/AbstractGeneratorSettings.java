@@ -79,6 +79,10 @@ abstract class AbstractGeneratorSettings {
 		return vectorSet;
 	}
 	
+	public final Vector2i turnKeyToPoint(Vector2i vec) {
+		return new Vector2i(vec.getX()*SPACING,vec.getY()*SPACING);
+	}
+	
 	public Set<Vector2i> getNeighborhoodKeys(Vector2i vec) {
 		Vector2i center = getFlooredVector(vec);
 		Set<Vector2i> surroundingCenters = new HashSet<Vector2i>(8);

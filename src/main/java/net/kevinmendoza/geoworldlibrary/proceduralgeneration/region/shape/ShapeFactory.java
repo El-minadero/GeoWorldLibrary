@@ -38,4 +38,14 @@ public class ShapeFactory {
 		return makeRegion(model, modifier, rand);
 	}
 	
+	public static IRegion makeEllipse(int a, int b, Vector2i center) {
+		Random rand = new Random(HashCodeOperations.createHash(a,b));
+		int[] dims = {a,b};
+		IConic	conic = ConicFactory.createConic(ConicType.ELLIPSE,dims);
+		IBoundingBox box = BoundingBoxFactory.createBoundingBox(BoxType.D2, dims, rand);
+		IBoundingModel model 	= BoundingModelFactory.makeBoundingModel(conic, box);
+		IRelativeSpace modifier 	= RelativeSpaceFactory.createRelative2DFrame(center, rand, false);
+		return makeRegion(model, modifier, rand);
+	}
+	
 }

@@ -30,8 +30,8 @@ final class LatticeCache extends Cache implements ICache {
 	
 	public final Set<Vector2i> getLocalKeys(Vector2i key){
 		Set<Vector2i> keySet = getKeySet();
-		Set<Vector2i> surroundingKeys = pointGenerator.getNeighborhoodKeys(key);
-		Set<Vector2i> asymmetricSet = new HashSet<>(surroundingKeys);
+		Set<Vector2i> surroundingKeys 	= pointGenerator.getNeighborhoodKeys(key);
+		Set<Vector2i> asymmetricSet 		= new HashSet<>(surroundingKeys);
 		asymmetricSet.removeAll(keySet);
  		if(!asymmetricSet.isEmpty()) { populateCache(asymmetricSet); }
 		return surroundingKeys;
@@ -39,16 +39,17 @@ final class LatticeCache extends Cache implements ICache {
 	
 	private void populateCache(Set<Vector2i> surroundingKeys) {
 		for(Vector2i point : surroundingKeys) {
-			INodeRegion region = nodeFactory.makePrototype(point);
+			Vector2i		center 	= pointGenerator.turnKeyToPoint(point);
+			INodeRegion	region 	= nodeFactory.makePrototype(center);
 			addKeyValuePair(point, region);
 		}
 	}
 
 	public final Set<INodeRegion> getClosestNodesToLocation(Vector3i globalVec) {
 		Vector2i vec = get2DGlobalVec(globalVec);
-		Set<INodeRegion> internals = getInternalRegions(vec);
-		Set<INodeRegion> externals = getExternalRegions(vec);
-		Set<INodeRegion> closestNodes = keepClosestNodes(MAX_INTERNAL_COUNT ,internals,externals,globalVec);
+		Set<INodeRegion> internals 		= getInternalRegions(vec);
+		Set<INodeRegion> externals 		= getExternalRegions(vec);
+		Set<INodeRegion> closestNodes 	= keepClosestNodes(MAX_INTERNAL_COUNT ,internals,externals,globalVec);
 		return closestNodes;
 	}
 	

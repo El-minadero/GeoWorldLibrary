@@ -14,5 +14,7 @@ public interface INodeRegion {
 	double getCenterDistance(Vector2i vec3);
 
 	String getLocationData(Vector3i globalVector);
+	
+	String toString();
 
 }

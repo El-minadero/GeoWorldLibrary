@@ -21,6 +21,8 @@ public interface IPointGenerator {
 	 * @return a list of centers with 2i global coordinates.
 	 */
 	public Set<Vector2i> getNeighborhoodKeys(Vector2i vec);
+	
+	public Vector2i turnKeyToPoint(Vector2i vec);
 
 	public int getRGBDebugVal(Vector3i query);
 

@@ -15,7 +15,7 @@ public class NodeBuilder implements ICacheBuilder {
 		cache 	  = new NodeCacheBuilder().build();
 	}
 	
-	public NodeBuilder setPrototype(INode prototype)	{ this.prototype=prototype; return this;		}
+	public NodeBuilder setPrototype(INode prototype)	{ this.prototype=prototype; 	return this;		}
 	public NodeBuilder setCache(INodeCache cache) 	{ this.cache = cache; 		return this; 	}
 
 	public INodeCache getCache() 		{	return cache; 		}

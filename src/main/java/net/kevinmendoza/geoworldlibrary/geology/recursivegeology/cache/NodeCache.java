@@ -80,6 +80,7 @@ class NodeCache implements INodeCache {
 	private static class NodeComparator implements Comparator<INodeRegion> {
 		
 		private final Vector2i vec;
+		
 		NodeComparator(Vector2i vec){
 			this.vec = vec;
 		}

@@ -17,7 +17,7 @@ public class NodeTest {
 
 	@Test
 	public void type() throws Exception {
-		assertNotNull(Prototype.class);
+		assertNotNull(Node.class);
 	}
 
 	@Test
