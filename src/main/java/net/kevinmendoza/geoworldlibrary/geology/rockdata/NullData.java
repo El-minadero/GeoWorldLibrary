@@ -21,6 +21,16 @@ public class NullData implements IData {
 		return start;
 	}
 
+	@Override
+	public double[] getArrayValue(Object o) {
+		return new double[3];
+	}
+
+	@Override
+	public Texture getTexture() {
+		return Texture.amorphous;
+	}
+
 	
 
 }

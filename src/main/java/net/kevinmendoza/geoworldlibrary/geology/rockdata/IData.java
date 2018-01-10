@@ -11,10 +11,19 @@ public interface IData {
 	/**
 	 *  Merges two IData objects into one
 	 * @param data an IData Object
-	 * @return 
+	 * @return IData data, an IData object
 	 */
 	IData merge(IData data);
 	
+	/**
+	 *  gets weight of Data object
+	 * 
+	 * @return weight a weight value between 0 and 1
+	 */
 	double get();
+	
+	double[] getArrayValue(Object o);
+	
+	Texture getTexture();
 
 }
