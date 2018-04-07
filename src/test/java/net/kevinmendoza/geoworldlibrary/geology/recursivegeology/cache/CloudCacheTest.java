@@ -1,13 +1,12 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
 
 import com.flowpowered.math.vector.Vector2i;
@@ -40,13 +39,13 @@ public class CloudCacheTest {
 
 	@Test
 	public void type() throws Exception {
-		assertThat(CloudCache.class, notNullValue());
+		assertNotNull(CloudCache.class);
 	}
 
 	@Test
 	public void instantiation() throws Exception {
 		ICache target = new CloudCache(builder);
-		assertThat(target, notNullValue());
+		assertNotNull(target);
 	}
 	
 	@Test

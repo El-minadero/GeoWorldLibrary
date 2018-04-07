@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import com.flowpowered.math.vector.Vector2i;
 
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
+
 public class PrototypeTest {
 	private static Vector2i center = new Vector2i(0,0);
 	private static Vector2i inside = new Vector2i(5,5);
@@ -57,7 +58,7 @@ public class PrototypeTest {
 		PrototypeBuilder builder = new PrototypeBuilder();
 		INode node 	= builder.build();
 		IData insideData = node.getData(inside);
-		assertTrue(insideData.get()-1<0.001);
+		assertTrue(insideData.getWeight()-1<0.001);
 	}
 	
 	@Test
@@ -65,7 +66,7 @@ public class PrototypeTest {
 		PrototypeBuilder builder = new PrototypeBuilder();
 		INode node 	= builder.build();
 		IData insideData = node.getData(outside);
-		assertTrue(insideData.get()<1 && insideData.get() > 0.1);
+		assertTrue(insideData.getWeight()<1 && insideData.getWeight() > 0.1);
 	}
 	
 	@Test
@@ -73,7 +74,7 @@ public class PrototypeTest {
 		PrototypeBuilder builder = new PrototypeBuilder();
 		INode node 	= builder.build();
 		IData insideData = node.getData(veryMuchOutside);
-		assertTrue(insideData.get()-1<0.001);
+		assertTrue(insideData.getWeight()-1<0.001);
 	}
 	
 }

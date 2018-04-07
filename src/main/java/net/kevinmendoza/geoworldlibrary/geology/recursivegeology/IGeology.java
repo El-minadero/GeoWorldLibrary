@@ -12,5 +12,4 @@ public interface IGeology {
 	public IData getData(Vector2i vector2i);
 	public IData getData(Vector3i vector3i);
 	
-	
 }

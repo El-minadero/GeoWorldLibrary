@@ -91,7 +91,7 @@ public class CompositeNodeTest {
 				.setCache(nodeCache)
 				.build();
 		IData insideData = node.getData(inside);
-		assertTrue(insideData.get()-1<0.001);
+		assertTrue(insideData.getWeight()-1<0.001);
 	}
 	
 	@Test
@@ -101,7 +101,7 @@ public class CompositeNodeTest {
 				.setCache(nodeCache)
 				.build();
 		IData insideData = node.getData(outside);
-		assertTrue(insideData.get() < 0.9 && insideData.get() > 0.2);
+		assertTrue(insideData.getWeight() < 0.9 && insideData.getWeight() > 0.2);
 	}
 	
 	@Test
@@ -111,6 +111,6 @@ public class CompositeNodeTest {
 				.setCache(nodeCache)
 				.build();
 		IData insideData = node.getData(veryMuchOutside);
-		assertTrue(insideData.get() < 0.001);
+		assertTrue(insideData.getWeight() < 0.001);
 	}
 }

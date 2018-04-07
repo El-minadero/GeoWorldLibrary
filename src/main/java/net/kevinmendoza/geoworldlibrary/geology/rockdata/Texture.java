@@ -2,9 +2,9 @@ package net.kevinmendoza.geoworldlibrary.geology.rockdata;
 
 public enum Texture {
 	// Igneous in origin
-	amorphous(true),Fine_Grained(true),Coarse_Grained(true),Pegmatitic(true),
+	Grained_Amorphous(true),Grained_Fine(true),Grained_Coarse(true),Grained_Pegmatitic(true),
 	// Sedimenary in origin
-	precipitate(false),Fine_Clastic(false),Medium_Clastic(false),Coarse_Clasic(false);
+	Clastic_Precipitate(false),Clastic_Fine(false),Clastic_Medium(false),Clastic_Coarse(false);
 	
 	public boolean igneous;
 	

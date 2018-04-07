@@ -1,42 +1,31 @@
 package net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.conics;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
-
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.conics.ConicFactory;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.conics.ConicType;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.conics.Ellipse;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.conics.IConic;
 
 public class RectangleConicTest {
 	private static final ConicType type = ConicType.RECTANGLE;
 	private static final int[] dims = { 4, 6 };
 	private static final double ZERO = 0.0001;
-	private ConicFactory factory;
-	private List<Vector2i> in2;
-	private List<Vector2i> edge2;
-	private List<Vector2i> out2;
-	private List<Vector3i> in3;
-	private List<Vector3i> edge3;
-	private List<Vector3i> out3;
+	private static ConicFactory factory;
+	private static List<Vector2i> in2;
+	private static List<Vector2i> edge2;
+	private static List<Vector2i> out2;
+	private static List<Vector3i> in3;
+	private static List<Vector3i> edge3;
+	private static List<Vector3i> out3;
 
-	@Test
-	@Before
-	public void type() throws Exception {
-		assertThat(Ellipse.class, notNullValue());
+	@BeforeAll
+	public static void type() throws Exception {
 		factory = new ConicFactory();
 
 		in2 = new ArrayList<>();
@@ -69,15 +58,15 @@ public class RectangleConicTest {
 		IConic target = factory.createConic(type, dims);
 		for (Vector2i vec : in2) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Conic", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Conic", actual, expected);
 		}
 		for (Vector2i vec : out2) {
 			actual = target.isInside(vec);
-			assertNotSame("Vector " + vec.toString() + " should be outside Conic", actual, is(equalTo(expected)));
+			assertNotEquals(actual, expected,"Vector " + vec.toString() + " should be outside Conic");
 		}
 		for (Vector2i vec : edge2) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Conic", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Conic", actual, expected);
 		}
 	}
 
@@ -88,15 +77,15 @@ public class RectangleConicTest {
 		IConic target = factory.createConic(type, dims);
 		for (Vector3i vec : in3) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Conic", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Conic", actual, expected);
 		}
 		for (Vector3i vec : out3) {
 			actual = target.isInside(vec);
-			assertNotSame("Vector " + vec.toString() + " should be outside Conic", actual, is(equalTo(expected)));
+			assertNotEquals( actual, expected,"Vector " + vec.toString() + " should be outside Conic");
 		}
 		for (Vector3i vec : edge3) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Conic", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Conic", actual, expected);
 		}
 	}
 
@@ -142,5 +131,11 @@ public class RectangleConicTest {
 			expression = (residual < ZERO);
 			assertTrue("residual from edge vector " + vec.toString() + " should be approximately zero", expression);
 		}
+	}
+	private void assertTrue(String string, boolean val) {
+		Assertions.assertTrue(val,string);
+	}
+	private void assertEquals(String string, Object o1, Object o2) {
+		Assertions.assertEquals(o1,o2,string);
 	}
 }

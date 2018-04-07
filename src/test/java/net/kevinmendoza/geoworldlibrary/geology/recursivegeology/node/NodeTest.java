@@ -3,7 +3,7 @@ package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.flowpowered.math.vector.Vector2i;
 
@@ -58,7 +58,7 @@ public class NodeTest {
 		NodeBuilder builder = new NodeBuilder();
 		INode node 	= builder.build();
 		IData insideData = node.getData(inside);
-		assertTrue(insideData.get()-1<0.001);
+		assertTrue(insideData.getWeight()-1<0.001);
 	}
 	
 	@Test
@@ -66,7 +66,7 @@ public class NodeTest {
 		NodeBuilder builder = new NodeBuilder();
 		INode node 	= builder.build();
 		IData insideData = node.getData(outside);
-		assertTrue(insideData.get() < 0.9 && insideData.get() > 0.2);
+		assertTrue(insideData.getWeight() < 0.9 && insideData.getWeight() > 0.2);
 	}
 	
 	@Test
@@ -74,7 +74,7 @@ public class NodeTest {
 		NodeBuilder builder = new NodeBuilder();
 		INode node 	= builder.build();
 		IData insideData = node.getData(veryMuchOutside);
-		assertTrue(insideData.get() < 0.001);
+		assertTrue(insideData.getWeight() < 0.001);
 	}
 	
 }

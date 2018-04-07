@@ -3,13 +3,15 @@ package net.kevinmendoza.geoworldlibrary.geology.rockdata;
 public interface IData {
 	
 	/**
-	 * Applies a numeric modifier to reduce values within the data
+	 * Applies a numeric modifier to reduce activity and metal modifiers within the data
 	 * @param modifier a double value. values above 1 increase values, values below 1 decrease values. 
 	 */
 	void modifyData(double modifier);
 
 	/**
-	 *  Merges two IData objects into one
+	 *  Merges two IData objects into one. The input IData BulkComposition (if present) and Texture (if present) 
+	 *  override the Object being operated upon.
+	 *  
 	 * @param data an IData Object
 	 * @return IData data, an IData object
 	 */
@@ -20,10 +22,10 @@ public interface IData {
 	 * 
 	 * @return weight a weight value between 0 and 1
 	 */
-	double get();
+	double getWeight();
+
+	IData copy();
 	
-	double[] getArrayValue(Object o);
-	
-	Texture getTexture();
+	boolean equals(Object other);
 
 }

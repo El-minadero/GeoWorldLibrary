@@ -1,10 +1,9 @@
 package net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.boundingbox;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,24 +25,20 @@ public class Box2DTest {
 	private static final BoxType type = BoxType.D2;
 	private static int[] dims;
 	private static final Random rand = new Random();
-	protected int X;
-	protected int Z;
+	protected static int X;
+	protected static int Z;
 	private static final double ZERO = 0.0001;
-	private BoundingBoxFactory factory;
-	protected List<Vector2i> in2;
-	protected List<Vector2i> edge2;
-	protected List<Vector2i> out2;
-	protected List<Vector3i> in3;
-	protected List<Vector3i> edge3;
-	protected List<Vector3i> out3;
-	protected IBoundingBox target;
+	private static BoundingBoxFactory factory;
+	protected static List<Vector2i> in2;
+	protected static List<Vector2i> edge2;
+	protected static List<Vector2i> out2;
+	protected static List<Vector3i> in3;
+	protected static List<Vector3i> edge3;
+	protected static List<Vector3i> out3;
+	protected static IBoundingBox target;
 
-	@Test
-	@Before
-	public void type() throws Exception {
-		assertThat(Box2D.class, notNullValue());
-		factory = new BoundingBoxFactory();
-		;
+	@BeforeAll
+	public static void type() throws Exception {
 		in2 = new ArrayList<>();
 		out2 = new ArrayList<>();
 		edge2 = new ArrayList<>();
@@ -69,11 +64,11 @@ public class Box2DTest {
 
 	}
 
-	protected IBoundingBox createTarget() {
-		return factory.createBoundingBox(type, dims, rand);
+	protected static IBoundingBox createTarget() {
+		return BoundingBoxFactory.createBoundingBox(type, dims, rand);
 	}
 
-	protected void setXYZBounds() {
+	protected static void setXYZBounds() {
 		X = 5;
 		Z = 6;
 		dims = new int[2];
@@ -88,7 +83,7 @@ public class Box2DTest {
 		IBoundingBox target = factory.createBoundingBox(type, dims, rand);
 		for (Vector3i vec : in3) {
 			actual = target.isOverXDim(vec);
-			assertNotSame("Vector X dim " + vec.toString() + " should be inside Box", actual, expected);
+			assertNotEquals("Vector X dim " + vec.toString() + " should be inside Box", actual, expected);
 		}
 
 		actual = target.isOverXDim(out3.get(0));
@@ -96,7 +91,7 @@ public class Box2DTest {
 
 		for (Vector3i vec : edge3) {
 			actual = target.isOverXDim(vec);
-			assertNotSame("Vector Xdim " + vec.toString() + " should be inside Conic", actual, expected);
+			assertNotEquals("Vector Xdim " + vec.toString() + " should be inside Conic", actual, expected);
 		}
 	}
 
@@ -112,7 +107,7 @@ public class Box2DTest {
 		all.addAll(edge3);
 		for (Vector3i vec : in3) {
 			actual = target.isOverYDim(vec);
-			assertSame("Vector Y" + vec.toString() + " should be inside Box", expected, actual);
+			assertEquals("Vector Y" + vec.toString() + " should be inside Box", expected, actual);
 		}
 	}
 
@@ -123,14 +118,14 @@ public class Box2DTest {
 		IBoundingBox target = factory.createBoundingBox(type, dims, rand);
 		for (Vector3i vec : in3) {
 			actual = target.isOverZDim(vec);
-			assertNotSame("Vector Z dim " + vec.toString() + " should be inside Box", actual, expected);
+			assertNotEquals("Vector Z dim " + vec.toString() + " should be inside Box", actual, expected);
 		}
 		actual = target.isOverZDim(out3.get(1));
 		assertTrue("Vector Z dim" + out3.get(1).toString() + " should be outside Conic", actual);
 
 		for (Vector3i vec : edge3) {
 			actual = target.isOverZDim(vec);
-			assertNotSame("Vector Z " + vec.toString() + " should be inside Conic", actual, expected);
+			assertNotEquals("Vector Z " + vec.toString() + " should be inside Conic", actual, expected);
 		}
 	}
 
@@ -182,15 +177,15 @@ public class Box2DTest {
 		IBoundingBox target = factory.createBoundingBox(type, dims, rand);
 		for (Vector2i vec : in2) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Box", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Box", actual, expected);
 		}
 		for (Vector2i vec : out2) {
 			actual = target.isInside(vec);
-			assertNotSame("Vector " + vec.toString() + " should be outside Box", actual, is(equalTo(expected)));
+			assertNotEquals("Vector " + vec.toString() + " should be outside Box", actual,expected);
 		}
 		for (Vector2i vec : edge2) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Box", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Box", actual, expected);
 		}
 	}
 
@@ -201,16 +196,25 @@ public class Box2DTest {
 		IBoundingBox target = factory.createBoundingBox(type, dims, rand);
 		for (Vector3i vec : in3) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Box", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Box", actual, expected);
 		}
 		for (Vector3i vec : out3) {
 			actual = target.isInside(vec);
-			assertNotSame("Vector " + vec.toString() + " should be outside Box", actual, is(equalTo(expected)));
+			assertNotEquals("Vector " + vec.toString() + " should be outside Box", actual, expected);
 		}
 		for (Vector3i vec : edge3) {
 			actual = target.isInside(vec);
-			assertThat("Vector " + vec.toString() + " should be inside Box", actual, is(equalTo(expected)));
+			assertEquals("Vector " + vec.toString() + " should be inside Box", actual, expected);
 		}
+	}
+	private void assertTrue(String string, boolean val) {
+		Assertions.assertTrue(val,string);
+	}
+	private void assertEquals(String string, Object o1, Object o2) {
+		Assertions.assertEquals(o1,o2,string);
+	}
+	private void assertNotEquals(String string, Object o1, Object o2) {
+		Assertions.assertNotEquals(o1,o2,string);
 	}
 
 }

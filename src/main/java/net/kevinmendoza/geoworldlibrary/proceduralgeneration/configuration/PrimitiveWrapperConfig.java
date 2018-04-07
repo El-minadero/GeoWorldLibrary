@@ -72,6 +72,9 @@ public class PrimitiveWrapperConfig {
 		}
 		
 		public double getValue(long seed) {
+			if (max-min < 0.00001) {
+				return 0;
+			}
 			Random rand = new Random(seed);
 			rand.nextDouble();
 			return min + rand.nextDouble()*(max-min);

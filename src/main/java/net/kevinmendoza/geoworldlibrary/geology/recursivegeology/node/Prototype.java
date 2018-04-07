@@ -1,23 +1,30 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.node;
 
+
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDataFactory;
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDecay;
+import net.kevinmendoza.geoworldlibrary.geology.rockmechanics.IStressField;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.IPointModifier;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
 
 public final class Prototype implements INode {
 
+	private final IStressField stressField;
 	private final IRegion region;
 	private final String name;
 	private final IDataFactory dataFactory;
 	private final IPointModifier modifier;
 	private final IDecay decay;
 	
+	public double[][] getStressField(Vector3i vector3i) { return null; }
+	public double[][] getStressField(Vector2i vector2i) { return null; }
+	
 	Prototype(PrototypeBuilder builder) {
+		stressField = builder.getStressField();
 		dataFactory 	= builder.getDataFactory();
 		region 		= builder.getRegion();
 		name 		= builder.getName();
@@ -82,6 +89,34 @@ public final class Prototype implements INode {
 		Vector3i modifiedPoint = modifier.getPoint(vector3i);
 		double distance = region.getNormalizedDistanceToEdge(modifiedPoint);
 		return decay.getModifier(distance);
+	}
+	public double[][] getDefaultStressField(Vector2i vector2i, boolean combined) {
+		return stressField.getStressField(vector2i, combined);
+	}
+	public double[][] getDefaultStressField(Vector3i vector3i, boolean combined) {
+		return stressField.getStressField(vector3i, combined);
+	}
+	public double[][] getStressField(Vector2i vector2i, boolean combined) {
+		double[][] field = stressField.getStressField(vector2i, combined);
+		if(isInside(vector2i)) { return field; }
+		double decay = getExternalMultiplier(vector2i);
+		return applyFieldDecay(field, decay);
+	}
+	
+	public double[][] getStressField(Vector3i vector3i, boolean combined) {
+		double[][] field = stressField.getStressField(vector3i, combined);
+		if(isInside(vector3i)) { return field; }
+		double decay = getExternalMultiplier(vector3i);
+		return applyFieldDecay(field, decay);
+	}
+	
+	private double[][] applyFieldDecay(double[][] field, double decay) {
+		for(int i =0;i<field.length;i++) {
+			for(int j =0;j<field.length;j++) {
+				field[i][j]*=decay;
+			}
+		}
+		return field;
 	}
 
 }

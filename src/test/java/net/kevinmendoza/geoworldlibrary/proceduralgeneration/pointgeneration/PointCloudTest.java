@@ -1,24 +1,20 @@
 package net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration;
 
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.PointCloud.*;
-
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.probability.IProbability;
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.probability.DistributionFactory;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Set;
-import java.util.Random;
-import java.util.Vector;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Assertions.*;
 
-import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector2i;
-import junit.framework.TestCase;
 
-public class PointCloudTest extends TestCase {
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.probability.DistributionFactory;
+import net.kevinmendoza.geoworldlibrary.proceduralgeneration.probability.IProbability;
+
+public class PointCloudTest {
 	
 	private static final long seed = 10;
 	private static final int spacing = 10;

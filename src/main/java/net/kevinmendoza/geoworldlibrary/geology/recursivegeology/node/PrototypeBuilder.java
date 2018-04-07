@@ -4,6 +4,7 @@ import net.kevinmendoza.geoworldlibrary.geology.rockdata.DecayFactory;
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDataFactory;
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.IDecay;
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.NullDataFactory;
+import net.kevinmendoza.geoworldlibrary.geology.rockmechanics.IStressField;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.IPointModifier;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointmodification.PointModifierFactory;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.IRegion;
@@ -58,6 +59,10 @@ public class PrototypeBuilder {
 	
 	public INode build() {
 		return new Prototype(this);
+	}
+	public IStressField getStressField() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

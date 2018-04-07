@@ -1,32 +1,31 @@
 package net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.relativelocation;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
 public class RelativeSpace3DTest {
 	private static final double ZERO = 0.001;
-	private Vector2i center2i = new Vector2i(5, 5);
-	private RelativeSpaceFactory factory;
-	private IRelativeSpace defaultModifier;
-	private IRelativeSpace modifier;
-	private Vector3i center3i;
-	private double cos;
-	private double sin;
-	private double cos_;
-	private double sin_;
+	private static Vector2i center2i = new Vector2i(5, 5);
+	private static IRelativeSpace defaultModifier;
+	private static IRelativeSpace modifier;
+	private static Vector3i center3i;
+	private static double cos;
+	private static double sin;
+	private static double cos_;
+	private static double sin_;
 
-	@Before
-	public void initialize() {
+	@BeforeAll
+	public static void initialize() throws Exception {
 		Random rand = new Random();
 		;
 		double angle = Math.toRadians(35);
@@ -34,11 +33,10 @@ public class RelativeSpace3DTest {
 		sin = Math.sin(angle);
 		cos_ = Math.cos(-angle);
 		sin_ = Math.sin(-angle);
-		factory = new RelativeSpaceFactory();
 		center2i = new Vector2i(5, 5);
 		center3i = new Vector3i(5, 5, 5);
-		defaultModifier = factory.createRelative3DFrame(center3i, rand, false);
-		modifier = factory.createRelative3DFrame(center3i, 0, angle, 0);
+		defaultModifier = RelativeSpaceFactory.createRelative3DFrame(center3i, rand, false);
+		modifier = RelativeSpaceFactory.createRelative3DFrame(center3i, 0, angle, 0);
 	}
 
 	private Vector2i rotateByAngle(Vector2i vec) {
@@ -67,8 +65,8 @@ public class RelativeSpace3DTest {
 
 	@Test
 	public void instantiation() throws Exception {
-		assertThat(defaultModifier, notNullValue());
-		assertThat(modifier, notNullValue());
+		assertNotNull(defaultModifier);
+		assertNotNull(modifier);
 	}
 
 	@Test
@@ -81,12 +79,11 @@ public class RelativeSpace3DTest {
 		Vector2i targetRot = modifier.getGlobalPoint(off11);
 		Vector2i defaultTargetRot = defaultModifier.getGlobalPoint(off11);
 
-		assertEquals("expected:" + center2i.toString() + ". was" + targetCenter.toString(), center2i, targetCenter);
-		assertEquals("expected:" + center2i.toString() + ". was" + defaultTargetCenter.toString(), center2i,
-				defaultTargetCenter);
+		assertEquals(center2i, targetCenter,"expected:" + center2i.toString() + ". was" + targetCenter.toString());
+		assertEquals(center2i,defaultTargetCenter,"expected:" + center2i.toString() + ". was" + defaultTargetCenter.toString());
 		assertEquals(defaultTargetCenter, targetCenter);
 
-		assertEquals("expected:" + offrot.toString() + ". was" + targetRot.toString(), offrot, targetRot);
+		assertEquals(offrot, targetRot,"expected:" + offrot.toString() + ". was" + targetRot.toString());
 		assertEquals(off11.add(center2i), defaultTargetRot);
 
 	}
@@ -101,12 +98,13 @@ public class RelativeSpace3DTest {
 		Vector3i targetRot = modifier.getGlobalPoint(off11);
 		Vector3i defaultTargetRot = defaultModifier.getGlobalPoint(off11);
 
-		assertEquals("expected:" + center3i.toString() + ". was" + targetCenter.toString(), center3i, targetCenter);
-		assertEquals("expected:" + center3i.toString() + ". was" + defaultTargetCenter.toString(), center3i,
-				defaultTargetCenter);
+		assertEquals(center3i, targetCenter,		 "expected:" + center3i.toString() + ". was" + 
+		targetCenter.toString());
+		assertEquals(center3i,defaultTargetCenter,"expected:" + center3i.toString() + ". was" + 
+		defaultTargetCenter.toString());
 		assertEquals(defaultTargetCenter, targetCenter);
 
-		assertEquals("expected:" + offrot.toString() + ". was" + targetRot.toString(), offrot, targetRot);
+		assertEquals(offrot, targetRot,"expected:" + offrot.toString() + ". was" + targetRot.toString());
 		assertEquals(off11.add(center3i), defaultTargetRot);
 	}
 
@@ -124,11 +122,10 @@ public class RelativeSpace3DTest {
 		Vector2i localPoint1 = modifier.getLocalPoint(globalPoint1);
 		Vector2i localPoint2 = defaultModifier.getLocalPoint(globalPoint2);
 
-		assertEquals("expected:" + center.toString() + ". was" + localCenter1.toString(), center, localCenter1);
-		assertEquals("expected:" + center.toString() + ". was" + localCenter2.toString(), center, localCenter2);
-		assertEquals("expected:" + localoffset.toString() + ". was" + localPoint1.toString(), localPoint1, localoffset);
-		assertEquals("expected:" + localoffset.toString() + ". was" + localPoint2.toString(), localPoint2, localoffset);
-
+		assertEquals(center, localCenter1,"expected:" + center.toString() + ". was" + localCenter1.toString());
+		assertEquals(center, localCenter2,"expected:" + center.toString() + ". was" + localCenter2.toString());
+		assertEquals(localPoint1, localoffset,"expected:" + localoffset.toString() + ". was" + localPoint1.toString());
+		assertEquals(localPoint2, localoffset,"expected:" + localoffset.toString() + ". was" + localPoint2.toString());
 	}
 
 	@Test
@@ -145,32 +142,28 @@ public class RelativeSpace3DTest {
 		Vector3i localPoint1 = modifier.getLocalPoint(globalPoint1);
 		Vector3i localPoint2 = defaultModifier.getLocalPoint(globalPoint2);
 
-		assertEquals("expected:" + center.toString() + ". was" + localCenter1.toString(), center, localCenter1);
-		assertEquals("expected:" + center.toString() + ". was" + localCenter2.toString(), center, localCenter2);
-		assertEquals("expected:" + localoffset.toString() + ". was" + localPoint1.toString(), localPoint1, localoffset);
-		assertEquals("expected:" + localoffset.toString() + ". was" + localPoint2.toString(), localPoint2, localoffset);
+		assertEquals(center, localCenter1,"expected:" + center.toString() + ". was" + localCenter1.toString());
+		assertEquals(center, localCenter2,"expected:" + center.toString() + ". was" + localCenter2.toString());
+		assertEquals(localPoint1, localoffset,"expected:" + localoffset.toString() + ". was" + localPoint1.toString());
+		assertEquals(localPoint2, localoffset,"expected:" + localoffset.toString() + ". was" + localPoint2.toString());
 	}
 
 	@Test
 	public void getCenter2i_A$() throws Exception {
 		Vector2i centerTarget = modifier.getCenter2i();
 		Vector2i defaultCenterTarget = defaultModifier.getCenter2i();
-		assertEquals("expected:" + center2i.toString() + ". was" + centerTarget.toString(), center2i, centerTarget);
-		assertEquals("expected:" + center2i.toString() + ". was" + defaultCenterTarget.toString(), center2i,
-				defaultCenterTarget);
-		assertEquals("expected:" + centerTarget.toString() + ". was" + defaultCenterTarget.toString(), centerTarget,
-				defaultCenterTarget);
+		assertEquals(center2i, centerTarget,"expected:" + center2i.toString() + ". was" + centerTarget.toString());
+		assertEquals(center2i, defaultCenterTarget,"expected:" + center2i.toString() + ". was" + defaultCenterTarget.toString());
+		assertEquals(centerTarget,defaultCenterTarget,"expected:" + centerTarget.toString() + ". was" + defaultCenterTarget.toString());
 	}
 
 	@Test
 	public void getCenter3i_A$() throws Exception {
 		Vector3i centerTarget = modifier.getCenter3i();
 		Vector3i defaultCenterTarget = defaultModifier.getCenter3i();
-		assertEquals("expected:" + center3i.toString() + ". was" + centerTarget.toString(), center3i, centerTarget);
-		assertEquals("expected:" + center3i.toString() + ". was" + defaultCenterTarget.toString(), center3i,
-				defaultCenterTarget);
-		assertEquals("expected:" + centerTarget.toString() + ". was" + defaultCenterTarget.toString(), centerTarget,
-				defaultCenterTarget);
+		assertEquals(center3i, centerTarget,"expected:" + center3i.toString() + ". was" + centerTarget.toString());
+		assertEquals(center3i,defaultCenterTarget,"expected:" + center3i.toString() + ". was" + defaultCenterTarget.toString());
+		assertEquals(centerTarget,defaultCenterTarget,"expected:" + centerTarget.toString() + ". was" + defaultCenterTarget.toString());
 	}
 
 	@Test
@@ -180,9 +173,9 @@ public class RelativeSpace3DTest {
 				.sqrt(Math.pow(center3i.getX() - testVec.getX(), 2) + Math.pow(center3i.getZ() - testVec.getZ(), 2));
 		double test1 = modifier.getDistanceToCenter(testVec);
 		double test2 = defaultModifier.getDistanceToCenter(testVec);
-		assertTrue("expected:" + expected + ". was" + test1, expected - test1 < ZERO);
-		assertTrue("expected:" + expected + ". was" + test2, expected - test2 < ZERO);
-		assertTrue("expected:" + test1 + ". was" + test2, test1 - test2 < ZERO);
+		assertTrue(expected - test1 < ZERO,"expected:" + expected + ". was" + test1);
+		assertTrue(expected - test2 < ZERO,"expected:" + expected + ". was" + test2);
+		assertTrue(test1 - test2 < ZERO,"expected:" + test1 + ". was" + test2);
 	}
 
 	@Test
@@ -191,8 +184,8 @@ public class RelativeSpace3DTest {
 		double expected = center2i.distance(testVec);
 		double test1 = modifier.getDistanceToCenter(testVec);
 		double test2 = defaultModifier.getDistanceToCenter(testVec);
-		assertTrue("expected:" + expected + ". was" + test1, expected - test1 < ZERO);
-		assertTrue("expected:" + expected + ". was" + test2, expected - test2 < ZERO);
-		assertTrue("expected:" + test1 + ". was" + test2, test1 - test2 < ZERO);
+		assertTrue(expected - test1 < ZERO,"expected:" + expected + ". was" + test1);
+		assertTrue(expected - test2 < ZERO,"expected:" + expected + ". was" + test2);
+		assertTrue(test1 - test2 < ZERO,"expected:" + test1 + ". was" + test2);
 	}
 }

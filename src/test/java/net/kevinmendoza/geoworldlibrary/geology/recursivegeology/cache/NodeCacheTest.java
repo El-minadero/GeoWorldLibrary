@@ -1,15 +1,13 @@
 package net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeAll;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
@@ -55,13 +53,13 @@ public class NodeCacheTest {
 	
 	@Test
 	public void type() throws Exception {
-		assertThat(NodeCache.class, notNullValue());
+		assertNotNull(NodeCache.class);
 	}
 
 	@Test
 	public void instantiation() throws Exception {
 		INodeCache cache = nodeCacheBuilder.build();
-		assertThat(cache, notNullValue());
+		assertNotNull(cache);
 	}
 
 	@Test
@@ -71,7 +69,7 @@ public class NodeCacheTest {
 		Set<INodeRegion> nodeset = new HashSet<>();
 		nodeset.addAll(cache.getNodes());
 		nodeset.addAll(cache.getNodes());
-		assertTrue(!nodeset.isEmpty(),"NO NODES!?");
+		Assertions.assertTrue(!nodeset.isEmpty(),"NO NODES!?");
 	}
 	
 	private static class NullCloudTest implements IPointCloud {
@@ -90,5 +88,6 @@ public class NodeCacheTest {
 		public void setSeed(long seed) { }
 		
 	}
+	
 
 }

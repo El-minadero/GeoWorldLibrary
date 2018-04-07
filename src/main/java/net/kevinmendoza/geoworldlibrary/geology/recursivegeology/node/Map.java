@@ -5,7 +5,7 @@ import com.flowpowered.math.vector.Vector3i;
 
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.IGeology;
 import net.kevinmendoza.geoworldlibrary.geology.rockdata.IData;
-import net.kevinmendoza.geoworldlibrary.geology.rockdata.NullData;
+import net.kevinmendoza.geoworldlibrary.geology.rockdata.RockData;
 
  
 final class Map extends AbstractNode implements IGeology {
@@ -14,14 +14,12 @@ final class Map extends AbstractNode implements IGeology {
 		super(builder);
 	}
 
-	public 		final IData getDefaultData(Vector2i vector2i) { IData 	data = new NullData();
-																		data.modifyData(0);
-																		return data; }
-	public 		final IData getDefaultData(Vector3i vector3i) { IData 	data = new NullData();
-																		data.modifyData(0);
-																		return data; }
-	protected 	final IData applyModifier(IData data, Vector2i vector2i) { return data; }
-	protected 	final IData applyModifier(IData data, Vector3i vector3i) { return data; }
+	public 		final IData getDefaultData(Vector2i vector2i) { IData 	data = new RockData.Builder().setNull().build();
+																			return data; }
+	public 		final IData getDefaultData(Vector3i vector3i) { IData 	data = new RockData.Builder().setNull().build();
+																			return data; }
+	protected 	final IData applyModifier(IData data, Vector2i vector2i) { 	return data; }
+	protected 	final IData applyModifier(IData data, Vector3i vector3i) { 	return data; }
 
 	protected 	final double getModifier(Vector2i vector2i) { return 1; }
 	protected 	final double getModifier(Vector3i vector3i) { return 1; }

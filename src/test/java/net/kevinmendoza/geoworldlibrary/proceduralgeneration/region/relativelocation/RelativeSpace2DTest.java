@@ -1,17 +1,12 @@
 package net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.relativelocation;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
@@ -21,18 +16,18 @@ import net.kevinmendoza.geoworldlibrary.proceduralgeneration.region.relativeloca
 
 public class RelativeSpace2DTest {
 	private static final double ZERO = 0.001;
-	private Vector2i center2i = new Vector2i(5, 5);
-	private RelativeSpaceFactory factory;
-	private IRelativeSpace defaultModifier;
-	private IRelativeSpace modifier;
-	private Vector3i center3i;
-	private double cos;
-	private double sin;
-	private double cos_;
-	private double sin_;
+	private static Vector2i center2i = new Vector2i(5, 5);
+	private static RelativeSpaceFactory factory;
+	private static IRelativeSpace defaultModifier;
+	private static IRelativeSpace modifier;
+	private static Vector3i center3i;
+	private static double cos;
+	private static double sin;
+	private static double cos_;
+	private static double sin_;
 
-	@Before
-	public void initialize() {
+	@BeforeAll
+	public static void initialize() {
 		Random rand = new Random();
 		;
 		double angle = Math.toRadians(35);
@@ -73,8 +68,8 @@ public class RelativeSpace2DTest {
 
 	@Test
 	public void instantiation() throws Exception {
-		assertThat(defaultModifier, notNullValue());
-		assertThat(modifier, notNullValue());
+		assertNotNull(defaultModifier);
+		assertNotNull(modifier);
 	}
 
 	@Test
@@ -90,10 +85,10 @@ public class RelativeSpace2DTest {
 		assertEquals("expected:" + center2i.toString() + ". was" + targetCenter.toString(), center2i, targetCenter);
 		assertEquals("expected:" + center2i.toString() + ". was" + defaultTargetCenter.toString(), center2i,
 				defaultTargetCenter);
-		assertEquals(defaultTargetCenter, targetCenter);
+		Assertions.assertEquals(defaultTargetCenter, targetCenter);
 
 		assertEquals("expected:" + offrot.toString() + ". was" + targetRot.toString(), offrot, targetRot);
-		assertEquals(off11.add(center2i), defaultTargetRot);
+		Assertions.assertEquals(off11.add(center2i), defaultTargetRot);
 
 	}
 
@@ -110,10 +105,10 @@ public class RelativeSpace2DTest {
 		assertEquals("expected:" + center3i.toString() + ". was" + targetCenter.toString(), center3i, targetCenter);
 		assertEquals("expected:" + center3i.toString() + ". was" + defaultTargetCenter.toString(), center3i,
 				defaultTargetCenter);
-		assertEquals(defaultTargetCenter, targetCenter);
+		Assertions.assertEquals(defaultTargetCenter, targetCenter);
 
 		assertEquals("expected:" + offrot.toString() + ". was" + targetRot.toString(), offrot, targetRot);
-		assertEquals(off11.add(center3i), defaultTargetRot);
+		Assertions.assertEquals(off11.add(center3i), defaultTargetRot);
 	}
 
 	@Test
@@ -201,4 +196,12 @@ public class RelativeSpace2DTest {
 		assertTrue("expected:" + expected + ". was" + test2, expected - test2 < ZERO);
 		assertTrue("expected:" + test1 + ". was" + test2, test1 - test2 < ZERO);
 	}
+	
+	private void assertTrue(String string, boolean val) throws Exception {
+		Assertions.assertTrue(val,string);
+	}
+	private void assertEquals(String string, Object o1, Object o2) throws Exception {
+		Assertions.assertEquals(o1,o2,string);
+	}
+	
 }

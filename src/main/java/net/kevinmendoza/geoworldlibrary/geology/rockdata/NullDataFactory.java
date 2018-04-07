@@ -6,13 +6,9 @@ import com.flowpowered.math.vector.Vector3i;
 public class NullDataFactory implements IDataFactory {
 
 	@Override
-	public IData getData(Vector2i modifiedPoint) {
-		return DataFactory.getDefaultData();
-	}
+	public IData getData(Vector2i modifiedPoint) { return new RockData.Builder().setNull().build(); }
 
 	@Override
-	public IData getData(Vector3i modifiedPoint) {
-		return DataFactory.getDefaultData();
-	}
+	public IData getData(Vector3i modifiedPoint) { return new RockData.Builder().setNull().build(); }
 
 }

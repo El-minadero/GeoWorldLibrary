@@ -1,27 +1,21 @@
 package net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration;
 
 
-import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.SinglePointLatticeGenerator.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.awt.Color;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Set;
-import com.flowpowered.math.vector.Vector2i;
-import com.flowpowered.math.vector.Vector3i;
 
-import junit.framework.TestCase;
-import net.kevinmendoza.geoworldlibrary.utilities.HashCodeOperations;
-
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.flowpowered.math.vector.Vector2i;
 
 
 
-public class SinglePointLatticeGeneratorTest extends TestCase {
+
+public class SinglePointLatticeGeneratorTest  {
 
 	private static final int spacing = 10;
 	private static final int ratio1 = 0;
