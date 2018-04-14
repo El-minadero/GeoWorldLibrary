@@ -1,6 +1,6 @@
 package net.kevinmendoza.geoworldlibrary.geology.rockdata;
 
-public class RockData implements IData {
+public class RockData implements IData,IRetrieveData {
 
 	private static final double DOUBLE_COMPARE_CUTOFF = 0.000001;
 	private Texture texture;
@@ -27,6 +27,16 @@ public class RockData implements IData {
 		this.activityModifiers=other.activityModifiers;
 		this.metals=other.metals;
 		weight=1;
+	}
+
+	public Texture getTexture() { return texture; }
+	public BulkComposition getComposition() { return bulkComposition; }
+	public boolean isNull() { return isNull; }
+	public double getModifierValue(ActivityModifiers modifier) {
+		return activityModifiers[modifier.ordinal()];
+	}
+	public double getMetalValue(Metals metal) {
+		return metals[metal.ordinal()];
 	}
 	
 	@Override
@@ -137,7 +147,7 @@ public class RockData implements IData {
 		
 		public Builder() {
 			isNull				= false;
-			texture          	= Texture.Clastic_Medium;
+			texture          	= Texture.Coarse;
 			bulkComposition   	= BulkComposition.Silicate;
 			activityModifiers	= new double[ActivityModifiers.values().length];
 			metals			 	= new double[Metals.values().length];
