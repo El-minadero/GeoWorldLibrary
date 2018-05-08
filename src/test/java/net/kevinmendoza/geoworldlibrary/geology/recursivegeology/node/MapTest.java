@@ -17,6 +17,7 @@ import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.LatticeCa
 import net.kevinmendoza.geoworldlibrary.geology.recursivegeology.cache.NodeCacheBuilder;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.IPointGenerator;
 import net.kevinmendoza.geoworldlibrary.proceduralgeneration.pointgeneration.PointGeneratorFactory;
+
 public class MapTest {
 
 	private static INodeCache nodeCache;
@@ -47,14 +48,14 @@ public class MapTest {
 	}
 
 	@Test
-	public void getBaseData1_A$Vector2i() throws Exception {
+	public void getBaseData1_AVector2i() throws Exception {
 		IGeology target = new MapBuilder().setCache(nodeCache).build();
 		double data = target.getData(inside).getWeight();
 		assertTrue(data-1< 0.001,"data should be less than 0.9, but greater than 0.2. is:" + data);
 	}
 	
 	@Test
-	public void getBaseData2_A$Vector2i() throws Exception {
+	public void getBaseData2_AVector2i() throws Exception {
 		IGeology target = new MapBuilder().setCache(nodeCache).build();
 		double data = target.getData(outside).getWeight();
 		assertTrue(data < 0.9 && data> 0.2,"data should be less than 0.9, but greater than 0.2. is:" + data);

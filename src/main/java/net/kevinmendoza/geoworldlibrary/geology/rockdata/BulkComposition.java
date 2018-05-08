@@ -5,5 +5,5 @@ public enum BulkComposition {
 	Felsic,
 	Silicate,
 	Carbonate,
-	Clay,
+	Clay;
 }
